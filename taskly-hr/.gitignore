@@ -1,0 +1,19 @@
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules
+.next
+out
+dist
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store

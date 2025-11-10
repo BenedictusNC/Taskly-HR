@@ -1,0 +1,59 @@
+{
+  "employees": [
+    {
+      "id": "emp_001",
+      "fullName": "Andra Pratama",
+      "email": "andra@taskly.local",
+      "position": "Designer",
+      "department": "Creative",
+      "joinedAt": "2024-06-12",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "emp_002",
+      "fullName": "Afrizal Ramadhan",
+      "email": "afrizal@taskly.local",
+      "position": "Video Editor",
+      "department": "Creative",
+      "joinedAt": "2024-08-01",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "emp_003",
+      "fullName": "Iqbal Setiawan",
+      "email": "iqbal@taskly.local",
+      "position": "Web Developer",
+      "department": "Tech",
+      "joinedAt": "2025-01-10",
+      "status": "PROBATION"
+    }
+  ],
+  "attendance": [
+    {
+      "id": "att_001",
+      "employeeId": "emp_001",
+      "date": "2025-11-01",
+      "checkIn": "08:59",
+      "checkOut": "17:12",
+      "type": "REGULAR"
+    },
+    {
+      "id": "att_002",
+      "employeeId": "emp_002",
+      "date": "2025-11-01",
+      "checkIn": "09:12",
+      "checkOut": "18:03",
+      "type": "REGULAR"
+    }
+  ],
+  "leave": [
+    {
+      "id": "lv_001",
+      "employeeId": "emp_003",
+      "dateFrom": "2025-11-12",
+      "dateTo": "2025-11-14",
+      "type": "SICK",
+      "status": "APPROVED"
+    }
+  ]
+}
