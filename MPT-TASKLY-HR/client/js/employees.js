@@ -1,0 +1,1 @@
+async function loadEmployees(){const data=await api('/employees');console.log(data);}loadEmployees();

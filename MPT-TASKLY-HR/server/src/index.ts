@@ -1,0 +1,1 @@
+import express from 'express';import cors from 'cors';import authRoutes from './routes/authRoutes';import employeeRoutes from './routes/employeeRoutes';const app=express();app.use(cors());app.use(express.json());app.use('/auth',authRoutes);app.use('/employees',employeeRoutes);app.listen(3000,()=>console.log('Server running on 3000'));

@@ -1,0 +1,1 @@
+export const login=async(req,res)=>{res.json({msg:'login success (dummy)'});};

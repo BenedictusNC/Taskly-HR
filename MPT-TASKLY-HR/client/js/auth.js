@@ -1,0 +1,1 @@
+async function login(email,password){const res=await api('/auth/login',{method:'POST',body:JSON.stringify({email,password})});console.log(res);}

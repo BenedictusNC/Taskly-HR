@@ -1,0 +1,2 @@
+const BASE_URL = 'http://localhost:3000';
+async function api(endpoint, options={}){const res=await fetch(BASE_URL+endpoint,{...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});return res.json();}

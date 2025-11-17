@@ -1,0 +1,1 @@
+import {Router} from 'express';import {getEmployees} from '../controllers/employeeController';import authMiddleware from '../middleware/authMiddleware';const router=Router();router.get('/',authMiddleware,getEmployees);export default router;
