@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  HR
+  MANAGER
+  EMPLOYEE
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      UserRole @default(EMPLOYEE)
+  employee  Employee?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Employee {
+  id          String      @id @default(cuid())
+  userId      String?     @unique
+  user        User?       @relation(fields: [userId], references: [id])
+  fullName    String
+  email       String      @unique
+  position    String
+  department  String
+  joinedAt    DateTime
+  status      String
+  attendances Attendance[]
+  leaves      LeaveRequest[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([department])
+  @@index([status])
+}
+
+model Attendance {
+  id         String   @id @default(cuid())
+  employeeId String
+  date       DateTime
+  checkIn    DateTime?
+  checkOut   DateTime?
+  type       String
+  employee   Employee @relation(fields: [employeeId], references: [id])
+
+  @@unique([employeeId, date])
+  @@index([date])
+}
+
+model LeaveRequest {
+  id         String   @id @default(cuid())
+  employeeId String
+  dateFrom   DateTime
+  dateTo     DateTime
+  type       String
+  status     String
+  employee   Employee @relation(fields: [employeeId], references: [id])
+
+  @@index([status])
+  @@index([dateFrom, dateTo])
+}
