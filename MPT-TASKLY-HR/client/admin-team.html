@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskly HR - Team Management</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Wix Madefor Text"', 'sans-serif'] },
+          colors: {
+            'taskly-red': '#8B0000',
+            'taskly-purple': '#3B0060',
+            'taskly-dark': '#000043',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .nav-link { position: relative; color: #9ca3af; font-weight: 500; transition: color 0.3s ease; }
+    .nav-link:hover { color: #3B0060; }
+    .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #3B0060; transition: width 0.3s ease; }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Custom Gradient untuk Tombol & Badge */
+    .bg-gradient-custom {
+      background: linear-gradient(90deg, #8B0000 0%, #3B0060 100%);
+    }
+    .btn-gradient:hover {
+      background: linear-gradient(90deg, #6b0000 0%, #2a0045 100%);
+      transform: scale(1.02);
+    }
+  </style>
+</head>
+
+<body class="bg-[#F8F9FD] min-h-screen font-sans flex overflow-hidden text-gray-700">
+
+  <!-- ================= KONTEN UTAMA (KIRI) ================= -->
+  <main class="flex-1 h-screen overflow-y-auto p-4 md:p-8 scrollbar-hide relative">
+    
+    <!-- HEADER NAVBAR -->
+    <header class="bg-white rounded-[50px] shadow-sm border border-gray-100 px-8 py-3 flex justify-between items-center mb-6 relative z-20">
+      <div class="text-2xl font-bold bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark bg-clip-text text-transparent tracking-tight whitespace-nowrap cursor-default">
+        TASKLY HR
+      </div>
+      <div class="flex items-center gap-8">
+        <a href="admin-dashboard.html" class="nav-link">
+          Dashboard
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="admin-management.html" class="nav-link">Management</a>
+          <a href="#" class="bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark text-white px-6 py-2.5 rounded-full font-bold shadow-md tracking-wide text-sm hover:scale-105 transition-transform">Team</a>
+          <a href="#" class="nav-link">Notification</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- CONTENT GRID (3 KOLOM) -->
+    <div class="max-w-[1400px] mx-auto pb-20">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- KOLOM 1: CLASS (ROLE LIST) - Span 4 -->
+        <div class="lg:col-span-4 bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col min-h-[600px]">
+          <h3 class="text-xl font-bold text-[#8B0000] mb-6">Class</h3>
+          
+          <div class="flex-1 space-y-5 overflow-y-auto pr-2 scrollbar-hide">
+            
+            <!-- Item Role -->
+            <div class="flex items-center justify-between">
+              <span class="bg-gradient-custom text-white text-xs px-4 py-1.5 rounded-full font-bold w-28 text-center">PM</span>
+              <span class="text-gray-400 font-medium text-sm">Project Manager</span>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <span class="bg-gradient-custom text-white text-xs px-4 py-1.5 rounded-full font-bold w-28 text-center">Lead Design</span>
+              <span class="text-gray-400 font-medium text-sm">User</span>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <span class="bg-gradient-custom text-white text-xs px-4 py-1.5 rounded-full font-bold w-28 text-center">Sup. Design</span>
+              <span class="text-gray-400 font-medium text-sm">User</span>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <span class="bg-gradient-custom text-white text-xs px-4 py-1.5 rounded-full font-bold w-28 text-center">Copywritter</span>
+              <span class="text-gray-400 font-medium text-sm">User</span>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <span class="bg-gradient-custom text-white text-xs px-4 py-1.5 rounded-full font-bold w-28 text-center">Sosmed Spec.</span>
+              <span class="text-gray-400 font-medium text-sm">User</span>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <span class="bg-gradient-custom text-white text-xs px-4 py-1.5 rounded-full font-bold w-28 text-center">Webdev</span>
+              <span class="text-gray-400 font-medium text-sm">User</span>
+            </div>
+
+          </div>
+
+          <!-- Tombol Aksi Bawah -->
+          <div class="mt-6 pt-4 border-t border-gray-50 flex flex-col gap-3">
+            <button class="w-full bg-gradient-custom text-white py-3 rounded-full font-bold shadow-md hover:scale-102 transition-transform text-sm btn-gradient">
+              Create Role
+            </button>
+            <button class="w-full bg-gradient-custom text-white py-3 rounded-full font-bold shadow-md hover:scale-102 transition-transform text-sm btn-gradient">
+              Role Permission
+            </button>
+          </div>
+        </div>
+
+        <!-- KOLOM 2: TEAM (Span 4) -->
+        <div class="lg:col-span-4 bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col min-h-[600px]">
+          <h3 class="text-xl font-bold text-[#8B0000] mb-6">Team</h3>
+
+          <div class="flex-1 space-y-4 overflow-y-auto pr-2 scrollbar-hide">
+            
+            <!-- Team Item -->
+            <div class="w-full bg-gradient-custom text-white py-3 rounded-full font-bold text-center shadow-md text-sm">
+              Team 1
+            </div>
+
+            <!-- Tombol Tambah Tim (Putih) -->
+            <button class="w-full border-2 border-gray-200 text-gray-300 py-2 rounded-full font-bold hover:border-gray-400 hover:text-gray-400 transition-colors text-xl flex items-center justify-center">
+              +
+            </button>
+
+          </div>
+
+          <!-- Tombol Aksi Bawah -->
+          <div class="mt-6 pt-4 border-t border-gray-50 flex flex-col gap-3">
+            <button class="w-full bg-gradient-custom text-white py-3 rounded-full font-bold shadow-md hover:scale-102 transition-transform text-sm btn-gradient">
+              Edit Team
+            </button>
+            <button class="w-full bg-gradient-custom text-white py-3 rounded-full font-bold shadow-md hover:scale-102 transition-transform text-sm btn-gradient">
+              Set Project Manager
+            </button>
+          </div>
+        </div>
+
+        <!-- KOLOM 3: ASSIGN & STATS (Span 4) -->
+        <div class="lg:col-span-4 flex flex-col gap-6">
+          
+          <!-- Card: Assign Member -->
+          <div class="bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100">
+            <h3 class="text-xl font-bold text-[#8B0000] mb-1">Assign Member to</h3>
+            <h3 class="text-xl font-bold text-[#8B0000] mb-6">Team</h3>
+            
+            <button class="w-full bg-gradient-custom text-white py-3 rounded-full font-bold shadow-md hover:scale-102 transition-transform text-sm btn-gradient">
+              Assign
+            </button>
+          </div>
+
+          <!-- Card: Team Statistic -->
+          <div class="bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex-1">
+            <h3 class="text-xl font-bold text-taskly-dark mb-6">Team Statistic</h3>
+            
+            <!-- Area Kosong Statistik -->
+            <div class="h-full border-2 border-dashed border-gray-100 rounded-xl flex items-center justify-center bg-gray-50 text-gray-400 text-sm font-medium">
+              No Data Available
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= SIDEBAR KANAN ================= -->
+  <aside class="w-[90px] bg-[#F8F9FD] flex flex-col items-center py-6 gap-6 border-l border-gray-200/50 relative z-30 shadow-[-4px_0_20px_rgba(0,0,0,0.02)]">
+    
+    <!-- PROFIL USER -->
+    <div class="relative group cursor-pointer mt-2">
+      <div class="w-14 h-14 rounded-full border-[3px] border-white shadow-lg overflow-hidden transition-transform transform group-hover:scale-105">
+        <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=000043&color=fff" class="w-full h-full object-cover">
+      </div>
+    </div>
+    
+    <div class="w-8 h-[2px] bg-gray-200 rounded-full"></div>
+    
+    <!-- LIST WORKSPACE (Isinya Icon Workspace Aktif) -->
+    <div id="workspaceIconList" class="flex flex-col gap-4 w-full items-center">
+      <!-- Ikon workspace akan muncul disini via JS -->
+    </div>
+
+    <!-- TOMBOL ADD WORKSPACE (+) -->
+    <a href="create.html" class="w-10 h-10 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-taskly-purple hover:border-taskly-purple hover:bg-white transition-all mt-2" title="Create or Join Workspace">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+    </a>
+
+  </aside>
+
+</body>
+</html>

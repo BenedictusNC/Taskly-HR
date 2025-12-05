@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskly HR - My Task</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Wix Madefor Text"', 'sans-serif'] },
+          colors: {
+            'taskly-red': '#8B0000',
+            'taskly-purple': '#3B0060',
+            'taskly-dark': '#000043',
+            'bar-green': '#93E583', // Warna hijau stabilo di gambar
+            'bar-teal': '#6EE7B7',  // Warna tosca 50%
+            'bar-red': '#F87171',   // Warna merah overload
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    /* Animasi Hover Navbar (Konsisten dengan Dashboard) */
+    .nav-link { position: relative; color: #9ca3af; font-weight: 500; transition: color 0.3s ease; }
+    .nav-link:hover { color: #3B0060; }
+    .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #3B0060; transition: width 0.3s ease; }
+    .nav-link:hover::after { width: 100%; }
+  </style>
+</head>
+
+<body class="bg-[#F8F9FD] min-h-screen font-sans flex overflow-hidden text-gray-700">
+
+  <!-- ================= KONTEN UTAMA (KIRI) ================= -->
+  <main class="flex-1 h-screen overflow-y-auto p-4 md:p-8 scrollbar-hide">
+    
+    <!-- HEADER NAVBAR (Konsisten dengan Dashboard) -->
+    <header class="bg-white rounded-[50px] shadow-sm border border-gray-100 px-8 py-3 flex justify-between items-center mb-6 relative z-20">
+      <div class="text-2xl font-bold bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark bg-clip-text text-transparent tracking-tight whitespace-nowrap cursor-default">
+        TASKLY HR
+      </div>
+      <div class="flex items-center gap-8">
+        <a href="pm-dashboard.html" class="nav-link">
+          Dashboard
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="#" class="bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark text-white px-6 py-2.5 rounded-full font-bold shadow-md tracking-wide text-sm hover:scale-105 transition-transform">Task</a>
+          <a href="pm-performance.html" class="nav-link">Performance</a>
+          <a href="#" class="nav-link">Notification</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- TASK TABLE CARD -->
+    <div class="max-w-[1400px] mx-auto">
+      <div class="bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 min-h-[600px]">
+        
+        <!-- Judul & Filter -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+          <h2 class="text-3xl font-bold text-[#8B0000]">My Task</h2>
+          
+          <div class="flex items-center gap-3">
+            <!-- 1. DROPDOWN PROJECT (Pengganti Tanggal) -->
+            <div class="relative group">
+              <select id="projectSelect" onchange="handleProjectChange()" class="appearance-none bg-gray-50 border border-gray-200 text-gray-600 py-2.5 pl-5 pr-10 rounded-xl font-medium focus:outline-none focus:border-taskly-purple cursor-pointer hover:bg-gray-100 transition-colors min-w-[200px] text-sm">
+                <option value="" disabled selected>Choose Project...</option>
+                <!-- Opsi Project akan diisi JS -->
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              </div>
+            </div>
+
+            <!-- 2. TOMBOL CREATE PROJECT -->
+            <button onclick="openProjectModal()" class="flex items-center gap-2 bg-purple-50 text-taskly-purple border border-purple-100 px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-purple-100 transition-colors" title="Buat Proyek Baru">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+              Project
+            </button>
+          </div>
+        </div>
+
+        <!-- TABLE HEADER -->
+        <div class="grid grid-cols-12 gap-4 text-gray-500 font-bold text-lg mb-4 px-2">
+          <div class="col-span-4">Task Name</div>
+          <div class="col-span-2 text-center border-l border-gray-200">Status</div>
+          <div class="col-span-1 text-center border-l border-gray-200">Effort</div>
+          <div class="col-span-1 text-center border-l border-gray-200">Value</div>
+          <div class="col-span-2 text-center border-l border-gray-200">Due Date</div>
+          <div class="col-span-2 text-center"></div> <!-- Kolom Kosong untuk Tombol Update -->
+        </div>
+
+        <!-- LIST TUGAS (Container) -->
+        <div id="taskListContainer" class="space-y-4">
+          <!-- Loading State -->
+          <div class="text-center py-10 text-gray-400 animate-pulse">Loading tasks...</div>
+        </div>
+
+    <!-- WORKLOAD CARD -->        
+        <!-- HEADER KARTU -->
+        <div class="flex justify-between items-center mb-10">
+          <h2 class="text-3xl font-bold text-[#8B0000]">Workload</h2>
+        </div>
+
+        <!-- CHART CONTAINER -->
+        <div class="flex gap-6">
+          
+          <!-- KOLOM KIRI: NAMA & STATUS -->
+          <div class="w-1/4 flex flex-col gap-10 pt-2">
+            
+            <!-- Person 1 -->
+            <div>
+              <h4 class="text-lg font-bold text-gray-600">Afrizal Ahmad</h4>
+              <span class="inline-block bg-[#2E0249] text-white text-xs px-4 py-1 rounded-full mt-1 font-medium">Balanced</span>
+            </div>
+
+            <!-- Person 2 -->
+            <div>
+              <h4 class="text-lg font-bold text-gray-600">Andra Ariloka</h4>
+              <span class="inline-block bg-[#8B0000] text-white text-xs px-4 py-1 rounded-full mt-1 font-medium">Overload</span>
+            </div>
+
+            <!-- Person 3 -->
+            <div>
+              <h4 class="text-lg font-bold text-gray-600">Iqbal Raihan</h4>
+              <span class="inline-block bg-[#2E0249] text-white text-xs px-4 py-1 rounded-full mt-1 font-medium">Underload</span>
+            </div>
+
+            <!-- Person 4 -->
+            <div>
+              <h4 class="text-lg font-bold text-gray-600">Zhera</h4>
+              <span class="inline-block bg-[#2E0249] text-white text-xs px-4 py-1 rounded-full mt-1 font-medium">Balanced</span>
+            </div>
+
+            <!-- Person 5 -->
+            <div>
+              <h4 class="text-lg font-bold text-gray-600">Nashriel</h4>
+              <span class="inline-block bg-[#8B0000] text-white text-xs px-4 py-1 rounded-full mt-1 font-medium">Balanced</span>
+            </div>
+
+          </div>
+
+          <!-- KOLOM KANAN: GRAFIK TIMELINE -->
+          <div class="flex-1 relative border-l border-gray-200 pl-4">
+            
+            <!-- GARIS VERTIKAL GRID (Background) -->
+            <div class="absolute inset-0 flex justify-between pointer-events-none z-0 pr-4">
+              <!-- Generate garis tipis untuk tanggal -->
+              <div class="w-px h-full bg-gray-100"></div><div class="w-px h-full bg-gray-100"></div><div class="w-px h-full bg-gray-100"></div>
+              <div class="w-px h-full bg-gray-100"></div><div class="w-px h-full bg-gray-100"></div><div class="w-px h-full bg-gray-100"></div>
+              <div class="w-px h-full bg-gray-100"></div><div class="w-px h-full bg-gray-100"></div><div class="w-px h-full bg-gray-100"></div>
+            </div>
+
+            <!-- BARIS WORKLOAD -->
+            <div class="flex flex-col gap-10 pt-2 relative z-10">
+              
+              <!-- Row 1: Afrizal -->
+              <div class="flex items-center h-[52px]"> <!-- Tinggi disesuaikan dengan tinggi nama di kiri -->
+                <div class="h-6 bg-bar-green w-1/4 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+                <div class="h-6 bg-bar-teal w-1/4 rounded-sm flex items-center justify-center text-[10px] font-bold text-teal-900 mx-1">50%</div>
+                <div class="h-6 bg-bar-green w-1/6 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+              </div>
+
+              <!-- Row 2: Andra (Overload) -->
+              <div class="flex items-center h-[52px]">
+                <div class="h-6 bg-bar-green w-1/6 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+                <div class="h-6 bg-bar-green w-1/5 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+                <div class="h-6 bg-bar-green w-1/12 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+                <div class="h-6 bg-bar-red w-1/4 rounded-sm flex items-center justify-center text-[10px] font-bold text-white mx-1">200%</div>
+              </div>
+
+              <!-- Row 3: Iqbal (Underload) -->
+              <div class="flex items-center h-[52px]">
+                <div class="h-6 bg-bar-green w-1/3 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+                <div class="w-1/12"></div> <!-- Gap -->
+                <div class="h-6 bg-bar-green w-1/12 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+                <div class="w-1/12"></div> <!-- Gap -->
+                <div class="h-6 bg-bar-green w-1/3 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+              </div>
+
+              <!-- Row 4: Zhera -->
+              <div class="flex items-center h-[52px]">
+                <div class="h-6 bg-bar-green w-1/4 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+                <div class="h-6 bg-bar-green w-1/6 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+                <div class="w-1/6"></div> <!-- Gap -->
+                <div class="h-6 bg-bar-green w-1/4 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+                <div class="h-6 bg-bar-red w-1/12 rounded-sm flex items-center justify-center text-[10px] font-bold text-white mx-1">200%</div>
+              </div>
+
+              <!-- Row 5: Nashriel -->
+              <div class="flex items-center h-[52px]">
+                <div class="h-6 bg-bar-green w-1/4 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+                <div class="h-6 bg-bar-teal w-1/4 rounded-sm flex items-center justify-center text-[10px] font-bold text-teal-900 mx-1">50%</div>
+                <div class="h-6 bg-bar-green w-1/3 rounded-sm flex items-center justify-center text-[10px] font-bold text-green-900 mx-1">100%</div>
+              </div>
+
+            </div>
+
+            <!-- X-AXIS (ANGKA TANGGAL) -->
+            <div class="flex justify-between mt-6 text-[10px] text-gray-400 font-mono border-t border-gray-200 pt-2">
+              <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+              <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+              <span>11</span><span>12</span><span>13</span><span>14</span><span>15</span>
+              <span>16</span><span>17</span><span>18</span><span>19</span><span>20</span>
+              <span>21</span><span>22</span><span>23</span><span>24</span><span>25</span>
+              <span>26</span><span>27</span><span>28</span><span>29</span><span>30</span><span>31</span>
+            </div>
+
+          </div>
+        </div>
+        </div>
+    </div>
+  </main>
+
+  <!-- ================= SIDEBAR KANAN ================= -->
+  <aside class="w-[90px] bg-[#F8F9FD] flex flex-col items-center py-6 gap-6 border-l border-gray-200/50 relative z-30 shadow-[-4px_0_20px_rgba(0,0,0,0.02)]">
+    
+    <!-- PROFIL USER -->
+    <div class="relative group cursor-pointer mt-2">
+      <div class="w-14 h-14 rounded-full border-[3px] border-white shadow-lg overflow-hidden transition-transform transform group-hover:scale-105">
+        <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=000043&color=fff" class="w-full h-full object-cover">
+      </div>
+    </div>
+    
+    <div class="w-8 h-[2px] bg-gray-200 rounded-full"></div>
+    
+    <!-- LIST WORKSPACE (Isinya Icon Workspace Aktif) -->
+    <div id="workspaceIconList" class="flex flex-col gap-4 w-full items-center">
+      <!-- Ikon workspace akan muncul disini via JS -->
+    </div>
+
+    <!-- TOMBOL ADD WORKSPACE (+) -->
+    <a href="create.html" class="w-10 h-10 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-taskly-purple hover:border-taskly-purple hover:bg-white transition-all mt-2" title="Create or Join Workspace">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+    </a>
+
+  </aside>
+
+  <!-- ================= MODAL UPDATE STATUS ================= -->
+  <div id="updateModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center z-50 transition-opacity">
+    <div class="bg-white p-8 rounded-[30px] w-full max-w-sm shadow-2xl transform scale-95 transition-transform" id="updateModalContent">
+      <h3 class="text-xl font-bold mb-4 text-taskly-dark text-center">Update Status</h3>
+      <p id="modalTaskTitle" class="text-center text-gray-500 mb-6 text-sm truncate">Task Title</p>
+      
+      <div class="space-y-3">
+        <button onclick="setStatus('To Do')" class="w-full py-3 rounded-xl border border-gray-200 hover:bg-gray-50 hover:border-gray-400 font-medium transition">To Do</button>
+        <button onclick="setStatus('In Progress')" class="w-full py-3 rounded-xl border border-purple-200 text-purple-700 bg-purple-50 hover:bg-purple-100 font-medium transition">In Progress</button>
+        <button onclick="setStatus('Review')" class="w-full py-3 rounded-xl border border-orange-200 text-orange-700 bg-orange-50 hover:bg-orange-100 font-medium transition">Review</button>
+        <button onclick="setStatus('Done')" class="w-full py-3 rounded-xl border border-green-200 text-green-700 bg-green-50 hover:bg-green-100 font-medium transition">Done</button>
+      </div>
+
+      <button onclick="closeUpdateModal()" class="mt-6 w-full py-2 text-gray-400 text-sm hover:text-gray-600">Cancel</button>
+    </div>
+  </div>
+
+  <div id="updateModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center z-50 transition-opacity">
+  <div class="bg-white p-8 rounded-[30px] w-full max-w-sm shadow-2xl transform scale-95 transition-transform" id="updateModalContent">
+    <h3 class="text-xl font-bold mb-4 text-taskly-dark text-center">Update Status Tugas</h3>
+    <p id="modalTaskTitle" class="text-center text-gray-500 mb-6 text-sm truncate">Task Title</p>
+    
+    <div class="space-y-3">
+      <button onclick="setStatus('To Do')" class="w-full py-3 rounded-xl border border-gray-200 hover:bg-gray-50 hover:border-gray-400 font-medium transition">To Do</button>
+      <button onclick="setStatus('In Progress')" class="w-full py-3 rounded-xl border border-purple-200 text-purple-700 bg-purple-50 hover:bg-purple-100 font-medium transition">In Progress</button>
+      <button onclick="setStatus('Review')" class="w-full py-3 rounded-xl border border-orange-200 text-orange-700 bg-orange-50 hover:bg-orange-100 font-medium transition">Review</button>
+      <button onclick="setStatus('Done')" class="w-full py-3 rounded-xl border border-green-200 text-green-700 bg-green-50 hover:bg-green-100 font-medium transition">Done</button>
+    </div>
+
+    <button onclick="closeUpdateModal()" class="mt-6 w-full py-2 text-gray-400 text-sm hover:text-gray-600">Cancel</button>
+  </div>
+</div>
+
+  <!-- ================= SCRIPT LOGIC ================= -->
+  <script>
+    let currentWorkspaceId = null;
+    let selectedTaskId = null; // ID task yang dipilih untuk modal
+    let currentUserRole = null; 
+
+    // --- HELPER FUNCTIONS (Duplikasi dari admin-management.html) ---
+    
+    function getInitials(name) {
+        if (!name) return 'US'; 
+        return name.split(' ').map(n => n.charAt(0)).join('').toUpperCase();
+    }
+
+    function renderProfile(username) {
+        const initials = getInitials(username);
+        const avatarElement = document.getElementById('userAvatar');
+        if (avatarElement) {
+            avatarElement.outerHTML = `<div id="userAvatar" class="w-14 h-14 rounded-full border-[3px] border-white shadow-lg overflow-hidden transition-transform transform group-hover:scale-105 bg-taskly-dark flex items-center justify-center text-white text-xl font-bold">${initials}</div>`;
+        }
+    }
+    
+    function renderWorkspaceIcons(memberships) {
+        const listContainer = document.getElementById('workspaceIconList');
+        if (!listContainer) return;
+        listContainer.innerHTML = ''; 
+        memberships.forEach(member => {
+            const ws = member.workspace;
+            if (!ws) return;
+            const initials = getInitials(ws.name);
+            const isActive = (ws.id === currentWorkspaceId) ? 'border-taskly-purple' : 'border-gray-200';
+            const html = `<div class="w-12 h-12 rounded-[16px] bg-white border-2 ${isActive} shadow-md flex items-center justify-center text-taskly-purple font-bold text-lg cursor-pointer transition-all hover:scale-105" title="${ws.name}">${initials}</div>`;
+            listContainer.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    function getActiveUserRole(allMemberships, currentWorkspaceId) {
+        // Asumsi fungsi ini ada
+        const activeMembership = allMemberships.find(m => m.workspaceId === currentWorkspaceId);
+        return activeMembership ? activeMembership.role : 'Member';
+    }
+
+
+    // --- 1. FUNGSI UTAMA: LOAD ALL TASKS (PM View) ---
+
+    async function loadTasks() {
+        const userId = localStorage.getItem('userId');
+        currentWorkspaceId = localStorage.getItem('currentWorkspaceId');
+
+        if (!userId || !currentWorkspaceId) {
+            window.location.replace('login.html');
+            return;
+        }
+        
+        try {
+            const res = await fetch(`http://localhost:3000/api/task/${currentWorkspaceId}`);
+            const json = await res.json();
+            const tasks = json.data;
+            const container = document.getElementById('taskListContainer');
+
+            // Kontainer utama adalah DIV dengan class max-w-[1400px]
+            const mainContent = document.querySelector('.max-w-[1400px].mx-auto'); 
+            if(mainContent) mainContent.classList.remove('opacity-60', 'pointer-events-none', 'filter', 'grayscale-[20%]');
+
+
+            container.innerHTML = ''; // Clear loading
+
+            if (tasks.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-gray-400">Tidak ada tugas ditemukan di Workspace ini.</div>`;
+                return;
+            }
+
+            tasks.forEach(task => {
+                // Format Tanggal (Due Date)
+                let dateStr = "-";
+                if (task.dueDate) {
+                    const d = new Date(task.dueDate);
+                    dateStr = d.toLocaleDateString('en-GB'); 
+                }
+                
+                const isDone = task.status === 'Done';
+                const buttonText = isDone ? 'Done' : 'Update';
+
+                const assignedUser = task.assignee ? task.assignee.username : 'Unassigned';
+                
+                const row = `
+                    <div class="grid grid-cols-12 gap-4 items-center group bg-white rounded-xl p-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                        
+                                                <div class="col-span-4 flex flex-col pl-2">
+                            <span class="font-medium text-gray-800 truncate">${task.title}</span>
+                            <span class="text-xs text-gray-500 mt-0.5">Assigned to: ${assignedUser}</span>
+                        </div>
+
+                                                <div class="col-span-2 text-center text-sm font-semibold">${task.status}</div>
+
+                                                <div class="col-span-1 text-center text-sm">${task.effort || '-'}</div>
+
+                                                <div class="col-span-1 text-center text-sm">${task.priority || '-'}</div>
+
+                                                <div class="col-span-2 text-center text-sm">${dateStr}</div>
+
+                                                <div class="col-span-2 flex justify-end">
+                            <button onclick="openUpdateModal('${task.id}', '${task.title}', '${task.status}')" 
+                                    class="w-full bg-taskly-purple text-white font-bold py-2 rounded-lg shadow-md hover:scale-[1.02] transition-transform ${isDone ? 'opacity-50 cursor-default' : ''}" 
+                                    ${isDone ? 'disabled' : ''}>
+                                ${buttonText}
+                            </button>
+                        </div>
+
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', row);
+            });
+
+        } catch (e) {
+            console.error("Error loading PM tasks:", e);
+        }
+    }
+    
+    // --- 2. MODAL FUNCTIONS ---
+    
+    function openUpdateModal(taskId, title, currentStatus) {
+        selectedTaskId = taskId;
+        document.getElementById('modalTaskTitle').innerText = title;
+        
+        // Tandai tombol status saat ini
+        document.querySelectorAll('#updateModalContent button').forEach(btn => {
+            if (btn.innerText === currentStatus) {
+                btn.classList.add('border-4', 'border-taskly-red');
+            } else {
+                btn.classList.remove('border-4', 'border-taskly-red');
+            }
+        });
+
+        const modal = document.getElementById('updateModal');
+        const content = document.getElementById('updateModalContent');
+        
+        modal.classList.remove('hidden');
+        setTimeout(() => { 
+            content.classList.remove('scale-95'); 
+        }, 10);
+    }
+
+    function closeUpdateModal() {
+        const modal = document.getElementById('updateModal');
+        const content = document.getElementById('updateModalContent');
+        
+        content.classList.add('scale-95');
+        setTimeout(() => { 
+            modal.classList.add('hidden'); 
+            selectedTaskId = null;
+        }, 150);
+    }
+
+    // 3. Status Update Logic (Memanggil API)
+    async function setStatus(newStatus) {
+        if(!selectedTaskId) return;
+
+        // PM logic: Hanya boleh update jika status berubah
+        // (Logika PM review yang lebih dalam bisa ditambahkan di sini, misalnya input revisi)
+        
+        try {
+            const res = await fetch(`http://localhost:3000/api/task/${selectedTaskId}/status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            });
+            
+            if (res.ok) {
+                closeUpdateModal();
+                await loadTasks(); // Refresh tabel
+            } else {
+                const errorData = await res.json();
+                alert(`Gagal update status: ${errorData.message}`);
+            }
+        } catch(e) {
+            alert("Error: Gagal koneksi server saat update status.");
+        }
+    }
+
+
+    // --- 4. INIT ---
+    document.addEventListener('DOMContentLoaded', async () => {
+        // [TODO: Asumsi helper functions sudah ada di file]
+        const userId = localStorage.getItem('userId');
+        const currentWorkspaceId = localStorage.getItem('currentWorkspaceId');
+
+        if (!userId || !currentWorkspaceId) {
+            window.location.replace('login.html');
+            return;
+        }
+        
+        // [TODO: Fetch user profile, render sidebar, dan set currentUserRole di sini]
+
+        // Load tasks setelah setup
+        loadTasks(); 
+    });
+
+</script>
+
+</body>
+</html>

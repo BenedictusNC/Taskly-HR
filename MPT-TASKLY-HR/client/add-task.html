@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskly HR - Tambah Tugas</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Wix Madefor Text"', 'sans-serif'] },
+          colors: {
+            'taskly-red': '#8B0000',
+            'taskly-purple': '#3B0060',
+            'taskly-dark': '#000043',
+            'taskly-gray-bg': '#F8F9FD'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Styling dasar */
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .nav-link { position: relative; color: #9ca3af; font-weight: 500; transition: color 0.3s ease; }
+    .nav-link:hover { color: #3B0060; }
+  </style>
+</head>
+
+<body class="bg-taskly-gray-bg min-h-screen font-sans flex overflow-hidden text-gray-700 relative">
+
+  <!-- ================= LAYER 1: BACKGROUND DASHBOARD (DIBLUR) ================= -->
+  <!-- Konten Dummy yang meniru dashboard di belakang -->
+  <div class="fixed inset-0 flex w-full h-full z-0 filter blur-sm pointer-events-none select-none">
+    
+    <main class="flex-1 h-full overflow-y-auto p-4 md:p-8 pt-24 scrollbar-hide relative">
+      <div class="max-w-[1400px] mx-auto space-y-6">
+        <!-- Grid Dummy Content -->
+        <div class="grid grid-cols-4 gap-6">
+          <div class="bg-white p-6 rounded-[24px] h-[300px] border border-gray-100 shadow-sm"></div>
+          <div class="bg-white p-6 rounded-[24px] h-[300px] border border-gray-100 shadow-sm"></div>
+          <div class="bg-white p-6 rounded-[24px] h-[300px] border border-gray-100 shadow-sm"></div>
+          <div class="bg-white p-6 rounded-[24px] h-[300px] border border-gray-100 shadow-sm"></div>
+        </div>
+        <div class="grid grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-[24px] h-[250px] border border-gray-100 shadow-sm"></div>
+            <div class="bg-white p-6 rounded-[24px] h-[250px] border border-gray-100 shadow-sm"></div>
+            <div class="bg-white p-6 rounded-[24px] h-[250px] border border-gray-100 shadow-sm"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ================= LAYER 2: UI UTAMA (TIDAK BLUR) ================= -->
+  
+  <!-- HEADER NAVBAR (FIXED & TAJAM) -->
+  <div class="absolute top-0 left-0 right-[90px] p-4 md:p-8 z-20">
+    <header class="bg-white rounded-[50px] shadow-sm border border-gray-100 px-8 py-3 flex justify-between items-center">
+      <div class="text-2xl font-bold bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark bg-clip-text text-transparent tracking-tight whitespace-nowrap cursor-pointer" onclick="window.location.href='./pm-dashboard.html'">
+        TASKLY HR
+      </div>
+      <div class="flex items-center gap-8">
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="./workload.html" class="nav-link">Workload</a>
+          <a href="./performance.html" class="nav-link">Performance</a>
+          <a href="#" class="nav-link">Notification</a>
+        </nav>
+        <a href="#" class="bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark text-white px-8 py-2.5 rounded-full font-bold shadow-md tracking-wide text-sm hover:scale-105 transition-transform uppercase">
+          Track
+        </a>
+      </div>
+    </header>
+  </div>
+
+  <!-- SIDEBAR KANAN (FIXED & TAJAM) -->
+  <aside class="absolute right-0 top-0 bottom-0 w-[90px] bg-[#F8F9FD] flex flex-col items-center py-6 gap-6 border-l border-gray-200/50 z-20 shadow-[-4px_0_20px_rgba(0,0,0,0.02)]">
+    <div class="relative group cursor-pointer mt-2">
+      <div class="w-14 h-14 rounded-full border-[3px] border-white bg-white shadow-lg overflow-hidden flex items-center justify-center text-taskly-purple font-bold text-xl">
+        Z
+      </div>
+    </div>
+    <button class="w-14 h-14 rounded-full bg-white border border-gray-300 shadow-md flex items-center justify-center text-gray-400 hover:text-taskly-purple hover:border-taskly-purple hover:shadow-lg transition-all text-3xl font-light mt-4">
+      +
+    </button>
+  </aside>
+
+  <!-- ================= LAYER 3: MODAL ADD TASK (OVERLAY) ================= -->
+  <!-- Container Overlay (Membuat layer gelap transparan di atas semua) -->
+  <div class="absolute inset-0 right-[90px] flex items-center justify-center z-30 bg-black/10"> 
+    
+    <!-- Form Card (Fixed width dan tinggi) -->
+    <div class="bg-white rounded-[30px] p-10 shadow-2xl border border-gray-100 w-full max-w-[800px] transform transition-transform animate-fade-in-up">
+      
+      <!-- Judul -->
+      <h2 class="text-2xl font-bold bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark bg-clip-text text-transparent mb-8 text-center">Add Task</h2>
+      
+      <form id="taskForm" class="space-y-6">
+        
+        <!-- Task Name -->
+        <div class="flex flex-col md:flex-row md:items-center gap-4">
+          <label class="w-32 text-gray-500 font-medium">Task Name</label>
+          <input type="text" id="title" name="title" placeholder="e.g. Finalize Q1 Budget" class="flex-1 p-3 border border-gray-200 rounded-full bg-white focus:outline-none focus:border-taskly-purple transition-colors">
+        </div>
+
+        <!-- Start & End Date -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex flex-col md:flex-row md:items-center gap-4">
+            <label class="w-32 md:w-24 text-gray-500 font-medium">Start Date</label>
+            <input type="date" id="startDate" name="startDate" class="flex-1 p-3 border border-gray-200 rounded-full bg-white focus:outline-none focus:border-taskly-purple text-gray-500">
+          </div>
+          <div class="flex flex-col md:flex-row md:items-center gap-4">
+            <label class="w-32 md:w-20 text-gray-500 font-medium text-right md:text-left pl-2">End Date</label>
+            <input type="date" class="flex-1 p-3 border border-gray-200 rounded-full bg-white focus:outline-none focus:border-taskly-purple text-gray-500">
+          </div>
+        </div>
+
+        <!-- Effort & Value -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex flex-col md:flex-row md:items-center gap-4">
+            <label class="w-32 md:w-24 text-gray-500 font-medium">Effort</label>
+            <input type="number" id="effort" name="effort" placeholder="Points" class="flex-1 p-3 border border-gray-200 rounded-full bg-white focus:outline-none focus:border-taskly-purple">
+          </div>
+          <div class="flex flex-col md:flex-row md:items-center gap-4">
+            <label class="w-32 md:w-20 text-gray-500 font-medium text-right md:text-left pl-2">Value</label>
+            <input type="number" placeholder="Score" class="flex-1 p-3 border border-gray-200 rounded-full bg-white focus:outline-none focus:border-taskly-purple">
+          </div>
+        </div>
+
+        <!-- Assignee & Project -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex flex-col md:flex-row md:items-center gap-4">
+            <label class="w-32 md:w-24 text-gray-500 font-medium">Assignee</label>
+            <select id="assigneeId" name="assigneeId" class="flex-1 p-3 border border-gray-200 rounded-full bg-white focus:outline-none focus:border-taskly-purple text-gray-500 appearance-none cursor-pointer">
+              <option>Select User</option>
+              <option>Afrizal Ahmad</option>
+              <option>Zhera</option>
+            </select>
+          </div>
+          <div class="flex flex-col md:flex-row md:items-center gap-4">
+            <label class="w-32 md:w-20 text-gray-500 font-medium text-right md:text-left pl-2">Project</label>
+            <select class="flex-1 p-3 border border-gray-200 rounded-full bg-white focus:outline-none focus:border-taskly-purple text-gray-500 appearance-none cursor-pointer">
+              <option>Select Project</option>
+              <option>Website Redesign</option>
+              <option>Mobile App</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tombol Add Task -->
+        <div class="flex justify-center gap-4 pt-6">
+          <button type="button" onclick="window.history.back()" class="text-gray-500 px-6 py-3 rounded-full font-bold hover:bg-gray-100 transition-colors">
+            Cancel
+          </button>
+          <button type="submit" id="submitButton" class="bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark text-white px-12 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-transform tracking-wide uppercase text-sm">
+            Add Task
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Asumsi: userId dan currentWorkspaceId sudah ada di Local Storage dari proses Login
+    const userId = localStorage.getItem('userId');
+    const currentWorkspaceId = localStorage.getItem('currentWorkspaceId');
+
+    // Validasi Sesi Awal
+    if (!currentWorkspaceId || !userId) {
+        alert("Error: Sesi tidak lengkap. Silakan login ulang dan buat workspace.");
+        window.location.replace('login.html'); 
+    }
+    
+    // --- 1. MEMUAT DAFTAR ANGGOTA TIM (ASSIGNEES) ---
+
+    async function loadAssignees() {
+        const assigneeSelect = document.getElementById('assigneeId');
+        if (!assigneeSelect) return;
+        assigneeSelect.innerHTML = '<option value="">Memuat Anggota...</option>';
+
+        try {
+            // Menggunakan API list member yang sudah kita buat sebelumnya
+            const res = await fetch(`http://localhost:3000/api/member/list/${currentWorkspaceId}`);
+            const data = await res.json();
+            
+            if (res.ok) {
+                const members = data.data; 
+                assigneeSelect.innerHTML = '<option value="">Unassigned (Tidak Ditugaskan)</option>'; 
+                
+                members.forEach(member => {
+                    const option = document.createElement('option');
+                    // Value adalah User ID (karena Task ditugaskan ke User ID)
+                    option.value = member.userId; 
+                    option.textContent = `${member.user.username} (${member.role})`;
+                    assigneeSelect.appendChild(option);
+                });
+            } else {
+                console.error("Gagal memuat member:", data.message);
+                assigneeSelect.innerHTML = '<option value="">Gagal Memuat</option>';
+            }
+
+        } catch (e) {
+            console.error("Network Error:", e);
+            assigneeSelect.innerHTML = '<option value="">Server Error</option>';
+        }
+    }
+
+
+    // --- 2. LOGIKA PENGIRIMAN FORM (HANDLE SUBMISSION) ---
+
+    async function submitTask(event) {
+        event.preventDefault(); 
+
+        // Karena form tidak memiliki ID, kita ambil dari event.target
+        const form = event.target;
+        const submitBtn = document.getElementById('submitButton');
+
+        // Data yang dikumpulkan dari form
+        const taskData = {
+            title: form.querySelector('#title').value,
+            description: form.querySelector('#description').value,
+            // Mengambil input date
+            startDate: form.querySelector('#startDate').value || null, 
+            dueDate: form.querySelector('#dueDate').value || null, 
+            
+            assignedTo: form.querySelector('#assigneeId').value || null, 
+            effort: parseInt(form.querySelector('#effort').value), 
+            priority: form.querySelector('#priority').value,
+            workspaceId: currentWorkspaceId,
+            projectId: form.querySelector('#projectId').value || null, 
+        };
+
+        // Tampilkan pesan loading
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Memproses...';
+        
+        try {
+            const res = await fetch('http://localhost:3000/api/task/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(taskData),
+            });
+
+            const data = await res.json();
+            
+            if (res.ok) {
+                alert(`Sukses! Task "${data.task.title}" berhasil dibuat!`);
+                // Redirect ke dashboard PM setelah sukses
+                window.location.replace('PM-task.html');
+            } else {
+                throw new Error(data.message || 'Gagal membuat tugas di server.');
+            }
+
+        } catch (error) {
+            alert(`Error: ${error.message}. Cek koneksi server Anda.`);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Add Task';
+        }
+    }
+
+
+    // --- 3. INIT ---
+    document.addEventListener('DOMContentLoaded', async () => {
+        // PENTING: Untuk form ini, kita tambahkan ID input yang hilang agar JS bisa mengaksesnya
+        // (Asumsi Anda telah menambahkan ID di HTML seperti yang disarankan)
+        
+        // Memuat daftar anggota tim
+        await loadAssignees();
+        
+        // Hubungkan fungsi submit ke form
+        const form = document.querySelector('form'); // Ambil form pertama di halaman
+        if (form) {
+            form.addEventListener('submit', submitTask);
+        }
+    });
+</script>
+
+</body>
+</html>

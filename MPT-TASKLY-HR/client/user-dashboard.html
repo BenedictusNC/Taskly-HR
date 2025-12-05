@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+
+<html lang="id">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Taskly HR - Dashboard</title>
+
+  
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+
+  <script>
+
+    tailwind.config = {
+
+      theme: {
+
+        extend: {
+
+          fontFamily: { sans: ['"Wix Madefor Text"', 'sans-serif'] },
+
+          colors: {
+
+            'taskly-red': '#8B0000',    /* Merah Gelap */
+
+            'taskly-purple': '#3B0060', /* Ungu Gelap */
+
+            'taskly-dark': '#000043',
+
+            'taskly-accent': '#aa0000', /* Merah terang untuk progress */
+
+          }
+
+        }
+
+      }
+
+    }
+
+  </script>
+
+
+
+  <style>
+
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+
+
+    /* Animasi Hover Navbar */
+
+    .nav-link { position: relative; color: #9ca3af; font-weight: 500; transition: color 0.3s ease; }
+
+    .nav-link:hover { color: #3B0060; }
+
+    .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #3B0060; transition: width 0.3s ease; }
+
+    .nav-link:hover::after { width: 100%; }
+
+  </style>
+
+</head>
+
+
+
+<body class="bg-[#F8F9FD] min-h-screen font-sans flex overflow-hidden text-gray-700">
+
+
+
+  <!-- ================= KONTEN UTAMA (KIRI) ================= -->
+
+  <main class="flex-1 h-screen overflow-y-auto p-4 md:p-8 scrollbar-hide">
+
+    
+
+    <!-- 1. HEADER NAVBAR -->
+
+    <header class="bg-white rounded-[50px] shadow-sm border border-gray-100 px-8 py-3 flex justify-between items-center mb-6 relative z-20">
+
+      <div class="text-2xl font-bold bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark bg-clip-text text-transparent tracking-tight whitespace-nowrap cursor-default">
+
+        TASKLY HR
+
+      </div>
+
+      <div class="flex items-center gap-8">
+
+        <a href="#" class="bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark text-white px-6 py-2.5 rounded-full font-bold shadow-md tracking-wide text-sm hover:scale-105 transition-transform">
+
+          Dashboard
+
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8">
+
+          <a href="user-task.html" class="nav-link">Task</a>
+
+          <a href="user-performance.html" class="nav-link">Performance</a>
+
+          <a href="#" class="nav-link">Notification</a>
+
+        </nav>
+
+      </div>
+
+    </header>
+
+
+
+    <!-- 2. INFO PROYEK & TOKEN -->
+
+    <div class="max-w-[1400px] mx-auto mb-8">
+
+      <div class="bg-white rounded-[24px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 transition-all hover:shadow-md">
+
+        <div>
+
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 flex items-center gap-2">
+
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Proyek Aktif
+
+          </p>
+
+          <div class="flex items-center gap-3">
+
+            <h2 id="wsName" class="text-3xl font-bold text-taskly-dark">Memuat...</h2><span id="userRole" class="bg-red-500 text-white text-[10px] px-2 py-1 rounded-full font-bold border border-red-100">...</span>
+
+            <span class="bg-purple-50 text-taskly-purple text-[10px] px-2 py-1 rounded-full font-bold border border-purple-100">LOCAL DB</span>
+
+          </div>
+
+        </div>
+
+        <div class="flex flex-col items-end">
+
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Kode Undangan</p>
+
+          <div class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 group cursor-pointer hover:border-taskly-purple transition-colors" onclick="copyCode()">
+
+            <span id="wsCode" class="text-xl font-mono font-bold text-taskly-purple tracking-widest">...</span>
+
+            <div class="relative">
+
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-400 group-hover:text-taskly-purple">
+
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5" />
+
+              </svg>
+
+              <span id="copyTooltip" class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-1 rounded opacity-0 transition-opacity pointer-events-none whitespace-nowrap shadow-lg">Disalin!</span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- 3. DASHBOARD GRID (KANBAN & WIDGETS) -->
+
+    <div id="dashboardContent" class="max-w-[1400px] mx-auto space-y-6 pb-10 opacity-60 pointer-events-none filter grayscale-[20%]">
+
+      <!-- BARIS 1: KANBAN BOARD -->
+
+      <!-- Tombol Add Task Dihapus dari Header, akan dipindahkan ke tempat lain jika diperlukan nanti -->
+
+      
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+        
+
+        <!-- TO DO -->
+
+        <div id="col-todo" 
+     class="kanban-column bg-white p-6 rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 min-h-[350px] flex flex-col"
+     ondragover="dragOver(event)" 
+     ondrop="dragDrop(event)"
+     ondragenter="dragEnter(event)" 
+     ondragleave="dragLeave(event)">
+  <h3 class="text-xl font-bold text-[#5e1224] mb-4">To Do</h3>
+  <div id="col-todo-tasks" class="space-y-3 flex-1"></div> 
+</div>
+
+
+
+        <!-- IN PROGRESS -->
+
+        <div id="col-progress" 
+     class="kanban-column bg-white p-6 rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 min-h-[350px] flex flex-col"
+     ondragover="dragOver(event)" 
+     ondrop="dragDrop(event)"
+     ondragenter="dragEnter(event)" 
+     ondragleave="dragLeave(event)">
+  <h3 class="text-xl font-bold text-taskly-purple mb-4">In Progress</h3>
+  <div id="col-progress-tasks" class="space-y-3 flex-1"></div>
+</div>
+
+
+
+        <!-- REVIEW -->
+
+      <div id="col-review" 
+     class="kanban-column bg-white p-6 rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 min-h-[350px] flex flex-col"
+     ondragover="dragOver(event)" 
+     ondrop="dragDrop(event)"
+     ondragenter="dragEnter(event)" 
+     ondragleave="dragLeave(event)">
+  <h3 class="text-xl font-bold text-[#5e1224] mb-4">Review</h3>
+  <div id="col-review-tasks" class="space-y-3 flex-1"></div>
+</div>
+
+
+
+        <!-- DONE -->
+
+        <div id="col-done" 
+     class="kanban-column bg-white p-6 rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 min-h-[350px] flex flex-col"
+     ondragover="dragOver(event)" 
+     ondrop="dragDrop(event)"
+     ondragenter="dragEnter(event)" 
+     ondragleave="dragLeave(event)">
+  <h3 class="text-xl font-bold text-taskly-purple mb-4">Done</h3>
+  <div id="col-done-tasks" class="space-y-3 flex-1"></div>
+</div>
+
+
+
+      </div>
+
+
+
+      <!-- BARIS 2: WIDGETS -->
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        
+
+        <!-- KIRI: Recommended & Weekly Progress -->
+
+        <div class="space-y-6">
+
+          
+
+          <!-- Recommended Task -->
+
+          <div class="bg-white rounded-[24px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
+
+            <h3 class="text-lg font-bold text-taskly-red">Recommended task</h3>
+
+            <div class="w-full md:w-1/2 h-10 border border-gray-200 rounded-full bg-white flex items-center px-4 text-gray-400 text-sm">
+
+              Website development...
+
+            </div>
+
+          </div>
+
+
+
+          <!-- Weekly Progress -->
+
+          <div class="bg-white rounded-[24px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100">
+
+            <h3 class="text-xl font-bold text-taskly-purple mb-4">Weekly Progress</h3>
+
+            <div class="w-full h-12 rounded-[16px] border border-taskly-dark p-1 relative flex items-center bg-white">
+
+              <div class="bg-[#8B0000] text-white h-full w-20 rounded-[12px] flex items-center justify-center font-bold text-lg shadow-sm z-10">
+
+                0%
+
+              </div>
+
+              <div class="flex-1 h-full bg-white rounded-r-[12px]"></div>
+
+            </div>
+
+            <p class="text-center text-gray-500 mt-3 text-lg font-medium">0 from 10 task already done</p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- KANAN: Reminder -->
+
+        <div class="bg-white rounded-[24px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100">
+
+          <h3 class="text-xl font-bold text-taskly-purple mb-6">Reminder</h3>
+
+          <div class="space-y-4">
+
+            <div class="flex items-center gap-4">
+
+              <div class="flex-1 h-12 border border-gray-200 rounded-full bg-white"></div>
+
+              <span class="text-gray-500 text-lg w-10 text-right">19 h</span>
+
+            </div>
+
+            <div class="flex items-center gap-4">
+
+              <div class="flex-1 h-12 border border-gray-200 rounded-full bg-white"></div>
+
+              <span class="text-gray-500 text-lg w-10 text-right">2 d</span>
+
+            </div>
+
+            <div class="flex items-center gap-4">
+
+              <div class="flex-1 h-12 border border-gray-200 rounded-full bg-white"></div>
+
+              <span class="text-gray-500 text-lg w-10 text-right">3 d</span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+
+  <!-- ================= SIDEBAR KANAN ================= -->
+
+  <aside class="w-[90px] bg-[#F8F9FD] flex flex-col items-center py-6 gap-6 border-l border-gray-200/50 relative z-30 shadow-[-4px_0_20px_rgba(0,0,0,0.02)]">
+
+    
+
+    <!-- PROFIL USER -->
+
+    <div class="relative group cursor-pointer mt-2">
+
+      <div class="w-14 h-14 rounded-full border-[3px] border-white shadow-lg overflow-hidden transition-transform transform group-hover:scale-105">
+
+        <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=000043&color=fff" class="w-full h-full object-cover">
+
+      </div>
+
+    </div>
+
+    
+
+    <div class="w-8 h-[2px] bg-gray-200 rounded-full"></div>
+
+    
+
+    <!-- LIST WORKSPACE (Isinya Icon Workspace Aktif) -->
+
+    <div id="workspaceIconList" class="flex flex-col gap-4 w-full items-center">
+
+      <!-- Ikon workspace akan muncul disini via JS -->
+
+    </div>
+
+
+
+    <!-- TOMBOL ADD WORKSPACE (+) -->
+
+    <a href="create.html" class="w-10 h-10 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-taskly-purple hover:border-taskly-purple hover:bg-white transition-all mt-2" title="Create or Join Workspace">
+
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+
+      </svg>
+
+    </a>
+
+
+
+  </aside>
+
+
+
+  <!-- ================= SCRIPT LOGIKA ================= -->
+
+  <script>
+    let currentWorkspaceId = null;
+    let draggedTaskId = null;
+    let draggedTaskStatus = null;
+    let currentUserRole = null;
+
+    // --- HELPER FUNCTIONS ---
+
+    // 1. Logika Copy Code
+    function copyCode() {
+        const codeText = document.getElementById('wsCode').innerText;
+        navigator.clipboard.writeText(codeText);
+        const tooltip = document.getElementById('copyTooltip');
+        tooltip.classList.remove('opacity-0', 'translate-y-2');
+        setTimeout(() => { tooltip.classList.add('opacity-0', 'translate-y-2'); }, 2000);
+    }
+    
+    // 2. Logika Inisial
+    function getInitials(name) {
+        if (!name) return 'US'; 
+        return name.split(' ')
+                    .map(n => n.charAt(0))
+                    .join('')
+                    .toUpperCase();
+    }
+
+    // 3. Logika Render Profil
+    function renderProfile(username) {
+        const initials = getInitials(username);
+        const avatarElement = document.getElementById('userAvatar');
+        
+        if (avatarElement) {
+            // Mengganti gambar placeholder dengan div inisial dinamis
+            avatarElement.outerHTML = `
+                <div id="userAvatar" class="w-14 h-14 rounded-full border-[3px] border-white shadow-lg overflow-hidden transition-transform transform group-hover:scale-105 bg-taskly-dark flex items-center justify-center text-white text-xl font-bold">
+                    ${initials}
+                </div>
+            `;
+        }
+    }
+    
+    // 4. Logika Render Ikon Workspace
+    function renderWorkspaceIcons(memberships) {
+        const listContainer = document.getElementById('workspaceIconList');
+        if (!listContainer) return;
+        
+        listContainer.innerHTML = ''; 
+
+        memberships.forEach(member => {
+            const ws = member.workspace;
+            if (!ws) return;
+
+            const initials = getInitials(ws.name);
+            // Menentukan border aktif berdasarkan workspace yang sedang dimuat
+            const isActive = (ws.id === currentWorkspaceId) ? 'border-taskly-purple' : 'border-gray-200';
+
+            const html = `
+                <div class="w-12 h-12 rounded-[16px] bg-white border-2 ${isActive} shadow-md flex items-center justify-center text-taskly-purple font-bold text-lg cursor-pointer transition-all hover:scale-105" title="${ws.name}">
+                    ${initials}
+                </div>
+            `;
+            listContainer.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    // 5. Logika Ambil Data Role Aktif
+    function getActiveUserRole(allMemberships, currentWorkspaceId) {
+        const activeMembership = allMemberships.find(m => m.workspaceId === currentWorkspaceId);
+        return activeMembership ? activeMembership.role : 'Member';
+    }
+
+
+    // --- FUNGSI BARU: LOAD TASKS KE KANBAN BOARD ---
+
+    // user-dashboard.html - Ganti seluruh fungsi loadTasks() ini:
+
+// user-dashboard.html - Ganti seluruh fungsi loadTasks() ini:
+
+async function loadTasks() {
+    if (!currentWorkspaceId) {
+        console.error("Workspace ID tidak terdeteksi. Tidak bisa memuat task.");
+        return;
+    }
+
+    try {
+        const res = await fetch(`http://localhost:3000/api/task/${currentWorkspaceId}`);
+        const json = await res.json();
+        const tasks = json.data; 
+
+        // 1. Bersihkan semua kolom Kanban (TARGETKAN CONTAINER TASK: col-xxx-tasks)
+        ['col-todo-tasks', 'col-progress-tasks', 'col-review-tasks', 'col-done-tasks'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = '';
+        });
+
+        // 2. Render Task
+        if (tasks && tasks.length > 0) {
+            tasks.forEach(task => {
+                let colId;
+                let borderColor = 'border-gray-200';
+                let textColor = 'text-gray-600';
+                
+                switch (task.status) {
+                    case 'To Do': 
+                        colId = 'col-todo-tasks'; borderColor = 'border-gray-200'; textColor = 'text-gray-600'; break;
+                    case 'In Progress': 
+                        colId = 'col-progress-tasks'; borderColor = 'border-purple-200'; textColor = 'text-purple-700'; break;
+                    case 'Review': 
+                        colId = 'col-review-tasks'; borderColor = 'border-orange-200'; textColor = 'text-orange-700'; break;
+                    case 'Done': 
+                        colId = 'col-done-tasks'; borderColor = 'border-green-200'; textColor = 'text-green-700'; break;
+                    default: return; 
+                }
+
+                const targetColumn = document.getElementById(colId); // <-- TARGET SUDAH BENAR: COL-XXX-TASKS
+                if (targetColumn) {
+                    const isCompleted = (task.status === 'Done');
+                    const card = `
+                        <div id="task-${task.id}"
+                             draggable="${!isCompleted}"
+                             ondragstart="dragStart(event)"
+                             data-task-id="${task.id}"
+                             data-current-status="${task.status}"
+                             class="task-card border ${borderColor} rounded-xl px-4 py-2.5 bg-white shadow-sm hover:shadow-md transition cursor-pointer flex justify-between items-center group mb-3 ${isCompleted ? 'opacity-70 cursor-default' : ''}">
+                            <span class="text-sm font-medium ${textColor} truncate max-w-[80%]">${task.title}</span>
+                            <span class="text-[10px] text-gray-400">#${task.priority ? task.priority.charAt(0) : '?'}</span> 
+                        </div>
+                    `;
+                    targetColumn.insertAdjacentHTML('beforeend', card);
+                }
+            });
+        }
+        
+        // --- 4. HAPUS EFEK LOADING ---
+        const dashboardContent = document.getElementById('dashboardContent');
+        if (dashboardContent) {
+            dashboardContent.classList.remove('opacity-60', 'pointer-events-none', 'filter', 'grayscale-[20%]');
+        }
+
+    } catch (e) {
+        console.error("[LOAD TASKS] Gagal mengambil task. Pastikan TaskController aktif.", e);
+    }
+}
+
+    function dragStart(e) {
+        // e.currentTarget memastikan kita selalu mengambil DIV yang punya event ondragstart (yaitu task-card)
+        const card = e.currentTarget; 
+        
+        draggedTaskId = card.getAttribute('data-task-id');
+        draggedTaskStatus = card.getAttribute('data-current-status');
+        
+        // Menggunakan tipe data spesifik untuk keamanan & keandalan
+        e.dataTransfer.setData('text/task-id', draggedTaskId);
+        e.dataTransfer.effectAllowed = 'move';
+        
+        // Styling visual
+        setTimeout(() => card.classList.add('dragging'), 40); 
+    }
+
+    function dragEnter(e) {
+        e.preventDefault();
+        const dropZone = e.target.closest('.kanban-column');
+        if (dropZone) {
+            dropZone.classList.add('drag-over');
+        }
+    }
+
+    function dragLeave(e) {
+        // Hapus class highlight HANYA jika kursor keluar dari kolom target
+        const dropZone = e.target.closest('.kankan-column');
+        if (dropZone) {
+            dropZone.classList.remove('drag-over');
+        }
+    }
+
+    function dragOver(e) {
+        e.preventDefault(); 
+        // Periksa apakah data yang ditransfer adalah task-id yang kita harapkan
+        if (e.dataTransfer.types.includes('text/task-id')) {
+            e.dataTransfer.dropEffect = 'move';
+        }
+    }
+
+    async function dragDrop(e) {
+    e.preventDefault();
+    
+    const dropZone = e.target.closest('.kanban-column'); 
+    if (!dropZone) return;
+    
+    // Hapus styling drag-over dari kolom drop
+    dropZone.classList.remove('drag-over');
+
+    const card = document.getElementById(`task-${draggedTaskId}`);
+    if (card) card.classList.remove('dragging'); 
+
+    const newColumnId = dropZone.id;
+    
+    // Konversi ID kolom menjadi string Status yang sesuai dengan Backend
+    let newStatus;
+    switch (newColumnId) {
+        case 'col-todo': newStatus = 'To Do'; break;
+        case 'col-progress': newStatus = 'In Progress'; break;
+        case 'col-review': newStatus = 'Review'; break;
+        case 'col-done': newStatus = 'Done'; break; // Target Done
+        default: return;
+    }
+    
+    // --- LOGIKA PEMBATASAN AKSES KE KOLOM DONE ---
+    const forbiddenStatuses = ['Member', 'Employee']; // Asumsi role pengguna biasa
+    
+    if (newStatus === 'Done' && forbiddenStatuses.includes(currentUserRole)) {
+        alert("Akses Ditolak: Hanya Project Manager atau Owner yang dapat memfinalisasi tugas!");
+        await loadTasks(); // Muat ulang untuk mengembalikan kartu ke posisi semula
+        return;
+    }
+    // --- AKHIR PEMBATASAN AKSES ---
+
+
+    // Panggil fungsi API jika status berbeda dari sebelumnya
+    if (draggedTaskId && newStatus && newStatus !== draggedTaskStatus) {
+        await moveTask(draggedTaskId, newStatus);
+    }
+    
+    draggedTaskId = null;
+    draggedTaskStatus = null;
+}
+
+
+    // 7. FUNGSI LOAD TASKS KE KANBAN BOARD
+    // user-dashboard.html - Ganti seluruh fungsi loadTasks()
+
+async function loadTasks() {
+    const userId = localStorage.getItem('userId'); // Ambil user ID
+    if (!currentWorkspaceId || !userId) {
+        console.error("ID tidak lengkap.");
+        return;
+    }
+
+    try {
+        const res = await fetch(`http://localhost:3000/api/task/user/${currentWorkspaceId}/${userId}`);
+        const json = await res.json();
+        const tasks = json.data; 
+
+        // 2. Bersihkan semua kolom Kanban (Targetkan div task container)
+        // PERHATIKAN: Target diubah ke col-xxx-tasks
+        ['col-todo-tasks', 'col-progress-tasks', 'col-review-tasks', 'col-done-tasks'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = '';
+        });
+
+        // 3. Render Task
+        if (tasks && tasks.length > 0) {
+            tasks.forEach(task => {
+                let colId;
+                let borderColor = 'border-gray-200';
+                let textColor = 'text-gray-600';
+                
+                switch (task.status) {
+                    case 'To Do': 
+                        colId = 'col-todo-tasks'; break;
+                    case 'In Progress': 
+                        colId = 'col-progress-tasks'; borderColor = 'border-purple-200'; textColor = 'text-purple-700'; break;
+                    case 'Review': 
+                        colId = 'col-review-tasks'; borderColor = 'border-orange-200'; textColor = 'text-orange-700'; break;
+                    case 'Done': 
+                        colId = 'col-done-tasks'; borderColor = 'border-green-200'; textColor = 'text-green-700'; break;
+                    default: return; 
+                }
+
+                const targetColumn = document.getElementById(colId);
+                if (targetColumn) {
+                    const isCompleted = (task.status === 'Done');
+                    const card = `
+                        <div id="task-${task.id}"
+                             draggable="${!isCompleted}"
+                             ondragstart="dragStart(event)"
+                             data-task-id="${task.id}"
+                             data-current-status="${task.status}"
+                             class="task-card border ${borderColor} rounded-xl px-4 py-2.5 bg-white shadow-sm hover:shadow-md transition cursor-pointer flex justify-between items-center group mb-3 ${isCompleted ? 'opacity-70 cursor-default' : ''}">
+                            <span class="text-sm font-medium ${textColor} truncate max-w-[80%]">${task.title}</span>
+                            <span class="text-[10px] text-gray-400">#${task.priority ? task.priority.charAt(0) : '?'}</span> 
+                        </div>
+                    `;
+                    targetColumn.insertAdjacentHTML('beforeend', card);
+                }
+            });
+        }
+        
+        // --- 4. HAPUS EFEK LOADING ---
+        const dashboardContent = document.getElementById('dashboardContent');
+        if (dashboardContent) {
+            dashboardContent.classList.remove('opacity-60', 'pointer-events-none', 'filter', 'grayscale-[20%]');
+        }
+
+    } catch (e) {
+        console.error("[LOAD TASKS] Gagal mengambil task. Pastikan TaskController aktif.", e);
+    }
+}    
+    // 8. FUNGSI MOVE TASK (API Call)
+    async function moveTask(taskId, newStatus) {
+        if(!newStatus) return; 
+
+        try {
+            // Kirim permintaan PATCH ke API untuk update status
+            const res = await fetch(`http://localhost:3000/api/task/${taskId}/status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    status: newStatus,
+                    userId: localStorage.getItem('userId') 
+                })
+            });
+
+            if (res.ok) {
+                // Refresh papan Kanban setelah pemindahan berhasil
+                await loadTasks();
+                console.log(`Task ${taskId} berhasil dipindahkan ke: ${newStatus}`);
+            } else {
+                const errorData = await res.json();
+                alert(`Gagal memindahkan task: ${errorData.message}`);
+            }
+        } catch(e) {
+            console.error("Failed to move task:", e);
+            alert("Error: Tidak bisa terhubung ke server untuk memindahkan task.");
+        }
+    }
+    // --- INIT (DOMContentLoaded) ---
+    document.addEventListener('DOMContentLoaded', async () => {
+        const userId = localStorage.getItem('userId');
+        
+        if (!userId) {
+            window.location.replace('login.html');
+            return;
+        }
+
+        try {
+            const res = await fetch(`http://localhost:3000/api/auth/${userId}`);
+            const data = await res.json();
+            const user = data.data;
+
+            if (res.ok) {
+                
+                if(user.workspace) {
+                    const ws = user.workspace;
+                    
+                    // Set Global State & Data Utama
+                    currentWorkspaceId = ws.id; 
+                    
+                    document.getElementById('wsName').innerText = ws.name;
+                    document.getElementById('wsCode').innerText = ws.workspaceCode;
+                    
+                    // Tampilkan Role User
+                    const role = getActiveUserRole(user.allMemberships, currentWorkspaceId);
+                    const roleEl = document.getElementById('userRole');
+                    if(roleEl) roleEl.innerText = role.toUpperCase();
+
+                    currentUserRole = role;
+                    
+                    // Render Sidebar (User Initials & Workspace List)
+                    renderProfile(user.username);
+                    renderWorkspaceIcons(user.allMemberships);
+                    
+                    // Lanjutkan dengan memuat tasks/widgets
+                    loadTasks(); 
+                    
+                } 
+                else { 
+                    window.location.replace('new.html');
+                }
+                
+            } else if (res.status === 404) {
+                alert("Sesi tidak valid. Silakan login ulang.");
+                window.location.replace('login.html');
+                
+            } else {
+                console.error("API Error:", data.message);
+                alert(`API Error: ${data.message}. Cek Console untuk detail.`);
+            }
+        } catch (err) {
+            console.error("Network or Fetch Error:", err);
+            alert("Tidak bisa terhubung ke server. Pastikan Backend berjalan.");
+        }
+    });
+
+</script>
+
+</body>
+
+</html>

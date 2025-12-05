@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskly HR - Create Project</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@400;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sans: ['"Wix Madefor Text"', 'sans-serif'] }, colors: {
+        'taskly-red': '#8B0000',
+        'taskly-purple': '#3B0060',
+        'taskly-dark': '#000043',
+      } } }
+    }
+  </script>
+  <style>
+    .bg-gradient-btn {
+      background: linear-gradient(90deg, #8B0000 0%, #3B0060 100%);
+    }
+  </style>
+</head>
+
+<body class="bg-[#F8F9FD] min-h-screen flex flex-col justify-between relative overflow-x-hidden font-sans">
+  
+  <!-- Background Decoration -->
+  <div class="fixed top-0 bottom-0 left-0 w-[60px] md:w-[200px] bg-cover bg-center -z-10 opacity-60 scale-x-[-1]"></div>
+  <div class="fixed top-0 bottom-0 right-0 w-[60px] md:w-[200px] bg-cover bg-center -z-10 opacity-60"></div>
+
+  <main class="flex-1 flex justify-center items-center w-full px-4 py-6">
+    <!-- PROJECT FORM CARD -->
+    <div class="bg-white rounded-[30px] p-10 shadow-2xl border border-gray-100 w-full max-w-[600px] text-center">
+      
+      <!-- HEADER -->
+      <h2 class="text-2xl font-bold bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark bg-clip-text text-transparent mb-8 text-center">Create Project</h2>
+      
+      <!-- FORM -->
+      <form id="createProjectForm" class="space-y-6 text-left">
+        
+        <!-- Project Name -->
+        <div class="flex flex-col md:flex-row md:items-center gap-4">
+          <label class="w-40 text-gray-500 font-medium">Project Name</label>
+          <input type="text" id="projectName" required class="flex-1 p-3 border border-gray-200 rounded-xl bg-white focus:outline-none focus:border-taskly-purple transition-colors">
+        </div>
+
+        <!-- Allocated Money -->
+        <div class="flex flex-col md:flex-row md:items-center gap-4">
+          <label class="w-40 text-gray-500 font-medium">Allocated Money</label>
+          <div class="flex-1 relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+            <input type="number" id="allocatedMoney" placeholder="0" class="w-full pl-8 p-3 border border-gray-200 rounded-xl bg-white focus:outline-none focus:border-taskly-purple transition-colors">
+          </div>
+        </div>
+
+        <!-- Liquid Date -->
+        <div class="flex flex-col md:flex-row md:items-center gap-4">
+          <label class="w-40 text-gray-500 font-medium">Liquid Date</label>
+          <input type="date" id="liquidDate" class="flex-1 p-3 border border-gray-200 rounded-xl bg-white focus:outline-none focus:border-taskly-purple text-gray-500">
+        </div>
+
+        <!-- Tombol Submit -->
+        <div class="flex justify-center pt-6">
+          <button type="submit" class="bg-gradient-btn text-white px-12 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-transform tracking-wide uppercase text-sm">
+            Create Project
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- CONTROL CENTER BUTTON (Simulasi Floating) -->
+  <div class="fixed bottom-8 right-8 z-50">
+    <button class="bg-gradient-btn text-white px-6 py-3 rounded-full font-bold shadow-xl text-xs tracking-widest hover:scale-105 transition-transform border-2 border-white text-center">
+      CONTROL<br>CENTER
+    </button>
+  </div>
+
+  <div class="absolute top-0 left-0 right-[90px] p-4 md:p-8 z-20">
+    <header class="bg-white rounded-[50px] shadow-sm border border-gray-100 px-8 py-3 flex justify-between items-center">
+      <div class="text-2xl font-bold bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark bg-clip-text text-transparent tracking-tight whitespace-nowrap cursor-pointer" onclick="window.location.href='./pm-dashboard.html'">
+        TASKLY HR
+      </div>
+      <div class="flex items-center gap-8">
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="./workload.html" class="nav-link">Workload</a>
+          <a href="./performance.html" class="nav-link">Performance</a>
+          <a href="#" class="nav-link">Notification</a>
+        </nav>
+        <a href="#" class="bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark text-white px-8 py-2.5 rounded-full font-bold shadow-md tracking-wide text-sm hover:scale-105 transition-transform uppercase">
+          Track
+        </a>
+      </div>
+    </header>
+  </div>
+
+  <aside class="absolute right-0 top-0 bottom-0 w-[90px] bg-[#F8F9FD] flex flex-col items-center py-6 gap-6 border-l border-gray-200/50 z-20 shadow-[-4px_0_20px_rgba(0,0,0,0.02)]">
+    <div class="relative group cursor-pointer mt-2">
+      <div class="w-14 h-14 rounded-full border-[3px] border-white bg-white shadow-lg overflow-hidden flex items-center justify-center text-taskly-purple font-bold text-xl">
+        Z
+      </div>
+    </div>
+    <button class="w-14 h-14 rounded-full bg-white border border-gray-300 shadow-md flex items-center justify-center text-gray-400 hover:text-taskly-purple hover:border-taskly-purple hover:shadow-lg transition-all text-3xl font-light mt-4">
+      +
+    </button>
+  </aside>
+
+  <script>
+    // Logika Frontend Create Project (Integrasi ke Backend)
+    document.getElementById('createProjectForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const userId = localStorage.getItem('userId');
+      const projectName = document.getElementById('projectName').value;
+      const money = document.getElementById('allocatedMoney').value;
+      const liquidDate = document.getElementById('liquidDate').value;
+      
+      // Catatan: Di backend, Anda perlu mendapatkan workspaceId dari user yang login (seperti di task.html)
+      // Untuk simulasi, kita pakai ID 1 dulu, tapi ini harus diganti dengan logic yang benar!
+      const dummyWorkspaceId = 1; 
+
+      if (!userId) {
+        alert("Sesi berakhir. Silakan login.");
+        window.location.href = './login.html';
+        return;
+      }
+      
+      try {
+        const res = await fetch('http://localhost:3000/api/project/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+              name: projectName,
+              description: `Allocated: Rp ${money}`,
+              workspaceId: dummyWorkspaceId,
+              // Data lain yang diperlukan untuk database
+          })
+        });
+
+        if (res.ok) {
+          alert('Proyek berhasil dibuat!');
+          // Redirect kembali ke halaman Task agar user bisa melihat proyek barunya
+          window.location.href = './task.html'; 
+        } else {
+          const errorData = await res.json();
+          alert('Gagal membuat proyek: ' + errorData.message);
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert('Tidak dapat terhubung ke server.');
+      }
+    });
+  </script>
+</body>
+</html>

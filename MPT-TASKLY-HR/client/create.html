@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskly HR - Create Workspace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@400;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { sans: ['"Wix Madefor Text"', 'sans-serif'] }, backgroundImage: { 'mask-pattern': "url('mask-group.png')" } } }
+    }
+  </script>
+</head>
+<body class="bg-white min-h-[100dvh] flex flex-col justify-between relative overflow-x-hidden font-sans">
+  
+  <div class="fixed top-0 bottom-0 left-0 w-[60px] md:w-[200px] bg-mask-pattern bg-cover bg-center -z-10 opacity-60 scale-x-[-1]"></div>
+  <div class="fixed top-0 bottom-0 right-0 w-[60px] md:w-[200px] bg-mask-pattern bg-cover bg-center -z-10 opacity-60"></div>
+
+  <main class="flex-1 flex justify-center items-center w-full px-4 py-6">
+    <div class="bg-white/90 backdrop-blur-sm md:backdrop-blur-none md:bg-white w-full max-w-[500px] p-6 md:p-10 rounded-[30px] shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-gray-100 relative z-10 text-center">
+      
+      <h1 class="text-3xl md:text-[48px] font-bold mb-8 md:mb-10 bg-gradient-to-r from-[#aa0000] via-[#4a007e] to-[#000043] bg-clip-text text-transparent tracking-tight">
+        TASKLY HR
+      </h1>
+
+      <form id="createForm" class="w-full space-y-6">
+        <div class="text-left group">
+          <label for="workspaceName" class="block text-base md:text-lg text-[#656565] mb-2 ml-3 font-medium">Workspace Name</label>
+          <input type="text" id="workspaceName" required placeholder="e.g. Finance Division"
+            class="w-full py-3 md:py-3.5 px-5 text-base md:text-lg rounded-full border-none bg-[#f9f9f9] text-gray-700 shadow-[inset_3px_3px_6px_rgba(0,0,0,0.08),inset_-3px_-3px_6px_rgba(255,255,255,0.9)] focus:outline-none focus:ring-2 focus:ring-[#4a007e]/20 transition-all">
+        </div>
+
+        <button type="submit" class="w-full py-3 md:py-3.5 mt-4 rounded-full text-lg md:text-xl font-bold text-white bg-gradient-to-r from-[#aa0000] via-[#4a007e] to-[#000043] shadow-md hover:scale-[1.02] active:scale-95 transition-all">
+          CREATE LOCAL WORKSPACE
+        </button>
+      </form>
+
+      <div class="mt-8 text-[#656565]">
+        <a href="join.html" class="text-[#9c9c9c] border-b border-[#9c9c9c] hover:text-[#4a007e] transition-colors">Join existing workspace</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('createForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userId = localStorage.getItem('userId');
+      const name = document.getElementById('workspaceName').value;
+
+      if(!userId) return window.location.href = 'login.html';
+
+      try {
+        const res = await fetch('http://localhost:3000/api/workspace/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, name })
+        });
+        
+        const data = await res.json();
+        if (res.ok) {
+          alert('Berhasil! Kode Invite: ' + data.workspace.workspaceCode);
+          window.location.replace('admin-dashboard.html');
+        } else {
+          alert(data.message);
+        }
+      } catch (err) { alert('Server Error'); }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskly HR - Management</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Wix Madefor Text"', 'sans-serif'] },
+          colors: {
+            'taskly-red': '#8B0000',
+            'taskly-purple': '#3B0060',
+            'taskly-dark': '#000043',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .nav-link { position: relative; color: #9ca3af; font-weight: 500; transition: color 0.3s ease; }
+    .nav-link:hover { color: #3B0060; }
+    .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #3B0060; transition: width 0.3s ease; }
+    .nav-link:hover::after { width: 100%; }
+
+    /* Custom Gradient untuk Tombol */
+    .bg-gradient-custom {
+      background: linear-gradient(90deg, #8B0000 0%, #3B0060 100%);
+    }
+    .btn-gradient {
+      background: linear-gradient(90deg, #8B0000 0%, #3B0060 100%);
+      transition: transform 0.3s ease;
+    }
+    .btn-gradient:hover {
+      background: linear-gradient(90deg, #6b0000 0%, #2a0045 100%);
+      transform: scale(1.02);
+    }
+    /* Warna Badge Role */
+    .badge-pm { background-color: #2E0249; }
+    .badge-lead { background-color: #8B0000; }
+    .badge-dev { background: linear-gradient(90deg, #8B0000 0%, #3B0060 100%); }
+
+    /* Efek hover pada list */
+    .user-list-item:hover {
+        background-color: #f1f5f9;
+        border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body class="bg-[#F8F9FD] min-h-screen font-sans flex overflow-hidden text-gray-700">
+
+  <!-- ================= KONTEN UTAMA (KIRI) ================= -->
+  <main class="flex-1 h-screen overflow-y-auto p-4 md:p-8 scrollbar-hide relative">
+    
+    <!-- HEADER NAVBAR -->
+    <header class="bg-white rounded-[50px] shadow-sm border border-gray-100 px-8 py-3 flex justify-between items-center mb-6 relative z-20">
+      <div class="text-2xl font-bold bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark bg-clip-text text-transparent tracking-tight whitespace-nowrap cursor-pointer" onclick="window.location.href='./admin-dashboard.html'">
+        TASKLY HR
+      </div>
+      <div class="flex items-center gap-8">
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="#" class="text-taskly-purple font-bold border-b-2 border-taskly-purple pb-1">Management</a> <!-- Aktif -->
+          <a href="./admin-team.html" class="nav-link">Team</a>
+          <a href="#" class="nav-link">Settings</a>
+        </nav>
+        <!-- Tombol OVERVIEW -->
+        <a href="./admin-dashboard.html" class="bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark text-white px-8 py-2.5 rounded-full font-bold shadow-md tracking-wide text-sm hover:scale-105 transition-transform uppercase">
+          Overview
+        </a>
+      </div>
+    </header>
+
+    <!-- CONTENT GRID (3 KOLOM) -->
+    <div class="max-w-[1400px] mx-auto pb-20">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- KOLOM 1: USER LIST (Span 4 - Lebar) -->
+        <div class="lg:col-span-4 bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col min-h-[600px]">
+          <h3 class="text-xl font-bold text-[#8B0000] mb-6">User</h3>
+          
+          <div id="userListContainer" class="flex-1 space-y-3 overflow-y-auto pr-2 scrollbar-hide">
+            
+            <!-- Items akan di-render di sini oleh JS -->
+            <!-- DUMMY DATA FOR VISUAL -->
+            <div class="flex items-center justify-between user-list-item p-2">
+              <span class="text-gray-700 font-medium">Sastra</span>
+              <span class="badge-pm text-white text-xs px-3 py-1 rounded-full font-bold w-28 text-center shadow-md">PM</span>
+            </div>
+            <div class="flex items-center justify-between user-list-item p-2">
+              <span class="text-gray-700 font-medium">Afrizal Ahmad</span>
+              <span class="badge-lead text-white text-xs px-3 py-1 rounded-full font-bold w-28 text-center shadow-md">Lead Design</span>
+            </div>
+            <div class="flex items-center justify-between user-list-item p-2">
+              <span class="text-gray-700 font-medium">Nashriel</span>
+              <span class="badge-pm text-white text-xs px-3 py-1 rounded-full font-bold w-28 text-center shadow-md">Sup. Design</span>
+            </div>
+            <div class="flex items-center justify-between user-list-item p-2">
+              <span class="text-gray-700 font-medium">Andra Ariloka</span>
+              <span class="badge-lead text-white text-xs px-3 py-1 rounded-full font-bold w-28 text-center shadow-md">Copywriter</span>
+            </div>
+            <div class="flex items-center justify-between user-list-item p-2">
+              <span class="text-gray-700 font-medium">Iqbal Raihan</span>
+              <span class="badge-dev text-white text-xs px-3 py-1 rounded-full font-bold w-28 text-center shadow-md">Webdev</span>
+            </div>
+          </div>
+
+          <!-- Tombol Edit Role -->
+          <div class="mt-6 pt-4 border-t border-gray-50">
+            <button id="btnEditRole" class="w-full btn-gradient text-white py-3 rounded-full font-bold shadow-md transition-transform text-sm">
+              Edit Role
+            </button>
+          </div>
+        </div>
+
+        <!-- KOLOM 2: ADD USER & DEACTIVE & CODE (Span 4) -->
+        <div class="lg:col-span-4 flex flex-col gap-6">
+          
+          <!-- Card: Add User -->
+          <div class="bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100">
+            <h3 class="text-xl font-bold text-[#8B0000] mb-6">Add User</h3>
+            <div class="flex flex-col gap-4">
+              <button class="w-full btn-gradient text-white py-3 rounded-full font-bold shadow-sm transition-transform text-sm">
+                Add User
+              </button>
+              <button class="w-full btn-gradient text-white py-3 rounded-full font-bold shadow-sm transition-transform text-sm">
+                Import User
+              </button>
+            </div>
+          </div>
+
+          <!-- Card: Deactive User -->
+          <div class="bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100">
+            <h3 class="text-xl font-bold text-[#8B0000] mb-6">Deactive User</h3>
+            <button class="w-full btn-gradient text-white py-3 rounded-full font-bold shadow-sm transition-transform text-sm">
+              Deactive User
+            </button>
+          </div>
+
+          <!-- Card: Workspace Code -->
+          <div class="bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col items-center justify-center flex-1">
+            <h3 class="text-lg font-bold text-taskly-dark mb-2">Workspace Code</h3>
+            <div id="workspaceCodeDisplay" class="text-5xl font-bold bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark bg-clip-text text-transparent tracking-widest">
+              Z10482
+            </div>
+          </div>
+
+        </div>
+
+        <!-- KOLOM 3: REQUEST, PASSWORD, MAINTENANCE (Span 4) -->
+        <div class="lg:col-span-4 flex flex-col gap-6">
+          
+          <!-- Card: Request Join -->
+          <div class="bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100">
+            <h3 class="text-xl font-bold text-[#8B0000] mb-6">Request Join</h3>
+            <button class="w-full btn-gradient text-white py-3 rounded-full font-bold shadow-sm transition-transform text-sm">
+              Request to Join
+            </button>
+          </div>
+
+          <!-- Card: Reset Password -->
+          <div class="bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100">
+            <h3 class="text-xl font-bold text-[#8B0000] mb-6">Reset Password</h3>
+            <button class="w-full btn-gradient text-white py-3 rounded-full font-bold shadow-sm transition-transform text-sm">
+              Reset User Password
+            </button>
+          </div>
+
+          <!-- Card: Maintenance -->
+          <div class="bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex-1 flex flex-col">
+            <h3 class="text-xl font-bold text-[#8B0000] mb-6">Maintenance</h3>
+            <div class="flex flex-col gap-4 mt-auto">
+              <button class="w-full btn-gradient text-white py-3 rounded-full font-bold shadow-sm transition-transform text-sm">
+                Backup
+              </button>
+              <button class="w-full btn-gradient text-white py-3 rounded-full font-bold shadow-sm transition-transform text-sm">
+                Restore
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- GLOBAL CONTROL BUTTON (FLOATING BOTTOM RIGHT) -->
+    <div class="fixed bottom-8 right-32 z-50">
+      <button class="bg-gradient-to-r from-[#8B0000] to-[#000043] text-white px-6 py-3 rounded-full font-bold shadow-2xl text-xs tracking-widest hover:scale-110 transition-transform border-2 border-white text-center leading-tight">
+        GLOBAL<br>CONTROL
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ================= SIDEBAR KANAN ================= -->
+  <aside class="w-[90px] bg-[#F8F9FD] flex flex-col items-center py-6 gap-6 border-l border-gray-200/50 relative z-30 shadow-[-4px_0_20px_rgba(0,0,0,0.02)]">
+    
+    <!-- PROFIL USER -->
+    <div class="relative group cursor-pointer mt-2">
+      <div class="w-14 h-14 rounded-full border-[3px] border-white bg-white shadow-lg overflow-hidden flex items-center justify-center text-taskly-purple font-bold text-xl">
+        Z
+      </div>
+    </div>
+
+    <!-- Tombol Tambah Besar (+) -->
+    <button class="w-14 h-14 rounded-full bg-white border border-gray-300 shadow-md flex items-center justify-center text-gray-400 hover:text-taskly-purple hover:border-taskly-purple hover:shadow-lg transition-all text-3xl font-light mt-4">
+      +
+    </button>
+
+  </aside>
+  
+  <script>
+    // --- DUMMY RENDER LOGIC ---
+    // Logika ini hanya untuk simulasi tampilan di frontend
+    document.addEventListener('DOMContentLoaded', () => {
+        const users = [
+            { name: "Sastra", role: "PM", color: "bg-[#2E0249]" },
+            { name: "Afrizal Ahmad", role: "Lead Design", color: "bg-[#8B0000]" },
+            { name: "Nashriel", role: "Sup. Design", color: "bg-[#2E0249]" },
+            { name: "Andra Ariloka", role: "Copywriter", color: "bg-[#8B0000]" },
+            { name: "Zhera", role: "Sosmed Spec.", color: "bg-[#8B0000]" },
+            { name: "Iqbal Raihan", role: "Webdev", color: "bg-gradient-custom" },
+            { name: "Budi Santoso", role: "Backend", color: "bg-gradient-custom" }
+        ];
+
+        const container = document.getElementById('userListContainer');
+        if (container) {
+            container.innerHTML = users.map(user => `
+                <div class="flex items-center justify-between user-list-item p-2 transition-colors cursor-pointer" onclick="handleMemberSelection(event)" data-member-id="user-${user.name}" data-username="${user.name}">
+                    <span class="text-gray-700 font-medium">${user.name}</span>
+                    <span class="${user.color} text-white text-xs px-3 py-1 rounded-full font-bold w-28 text-center shadow-md">${user.role.toUpperCase()}</span>
+                </div>
+            `).join('');
+        }
+        
+        // Simulasikan Pemilihan User (Untuk tombol Edit Role)
+        document.querySelectorAll('.user-list-item').forEach(item => {
+            item.addEventListener('click', handleMemberSelection);
+        });
+
+        // Event listener untuk tombol Edit Role
+        document.getElementById('btnEditRole').addEventListener('click', () => {
+            if (selectedMemberId) {
+                alert(`Mengedit role untuk user ID: ${selectedMemberId}`);
+                // Di sini nanti logika modal edit role akan dipanggil
+            } else {
+                alert("Pilih user dulu!");
+            }
+        });
+    });
+
+    let selectedMemberId = null;
+
+    function handleMemberSelection(event) {
+        document.querySelectorAll('.user-list-item').forEach(item => {
+            item.classList.remove('bg-taskly-red/10', 'border', 'border-taskly-red');
+        });
+
+        const item = event.currentTarget; 
+        item.classList.add('bg-taskly-red/10', 'border', 'border-taskly-red');
+        
+        selectedMemberId = item.getAttribute('data-member-id');
+    }
+  </script>
+
+</body>
+</html>

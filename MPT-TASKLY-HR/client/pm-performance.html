@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taskly HR - Kinerja Tim</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Wix Madefor Text"', 'sans-serif'] },
+          colors: {
+            'taskly-red': '#8B0000',
+            'taskly-purple': '#3B0060',
+            'taskly-dark': '#000043',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    .nav-link { position: relative; color: #9ca3af; font-weight: 500; transition: color 0.3s ease; }
+    .nav-link:hover { color: #3B0060; }
+    .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #3B0060; transition: width 0.3s ease; }
+    .nav-link:hover::after { width: 100%; }
+  </style>
+</head>
+
+<body class="bg-[#F8F9FD] min-h-screen font-sans flex overflow-hidden text-gray-700">
+
+  <!-- ================= KONTEN UTAMA (KIRI) ================= -->
+  <main class="flex-1 h-screen overflow-y-auto p-4 md:p-8 scrollbar-hide relative">
+    
+    <!-- HEADER NAVBAR -->
+    <header class="bg-white rounded-[50px] shadow-sm border border-gray-100 px-8 py-3 flex justify-between items-center mb-6 relative z-20">
+      <div class="text-2xl font-bold bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark bg-clip-text text-transparent tracking-tight whitespace-nowrap cursor-default">
+        TASKLY HR
+      </div>
+      <div class="flex items-center gap-8">
+        <a href="pm-dashboard.html" class="nav-link">
+          Dashboard
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="pm-Task.html" class="nav-link">Task</a>
+          <a href="#" class="bg-gradient-to-r from-taskly-red via-taskly-purple to-taskly-dark text-white px-6 py-2.5 rounded-full font-bold shadow-md tracking-wide text-sm hover:scale-105 transition-transform">Performance</a>
+          <a href="#" class="nav-link">Notification</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- CONTENT GRID -->
+    <div class="max-w-[1400px] mx-auto pb-20">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- KOLOM 1: CONTRIBUTION SCORE -->
+        <div class="bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 min-h-[600px]">
+          <h3 class="text-xl font-bold text-[#8B0000] mb-8 text-center">Contribution Score</h3>
+          
+          <div class="space-y-8">
+            <!-- Item 1 -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 font-medium">Afrizal Ahmad</span>
+              <div class="bg-gradient-to-r from-[#8B0000] to-[#000043] text-white px-4 py-1.5 rounded-full font-bold text-sm w-20 text-center shadow-md">9.75</div>
+            </div>
+            <!-- Item 2 -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 font-medium">Andra Ariloka</span>
+              <div class="bg-gradient-to-r from-[#8B0000] to-[#000043] text-white px-4 py-1.5 rounded-full font-bold text-sm w-20 text-center shadow-md">4.54</div>
+            </div>
+            <!-- Item 3 -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 font-medium">Iqbal Raihan</span>
+              <div class="bg-gradient-to-r from-[#8B0000] to-[#000043] text-white px-4 py-1.5 rounded-full font-bold text-sm w-20 text-center shadow-md">14.23</div>
+            </div>
+            <!-- Item 4 -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 font-medium">Zhera</span>
+              <div class="bg-gradient-to-r from-[#8B0000] to-[#000043] text-white px-4 py-1.5 rounded-full font-bold text-sm w-20 text-center shadow-md">7.97</div>
+            </div>
+            <!-- Item 5 -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 font-medium">Nashriel</span>
+              <div class="bg-gradient-to-r from-[#8B0000] to-[#000043] text-white px-4 py-1.5 rounded-full font-bold text-sm w-20 text-center shadow-md">8.82</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KOLOM 2: TASK COMPLETION PERFORMANCE -->
+        <div class="bg-white rounded-[30px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 min-h-[600px]">
+          <h3 class="text-xl font-bold text-[#8B0000] mb-2 text-center leading-tight">Task Completition<br>Performance</h3>
+          
+          <div class="space-y-8 mt-6">
+            <!-- Item 1 -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 font-medium">Afrizal Ahmad</span>
+              <div class="bg-gradient-to-r from-[#8B0000] to-[#000043] text-white px-4 py-1.5 rounded-full font-bold text-sm w-20 text-center shadow-md">-7.3%</div>
+            </div>
+            <!-- Item 2 -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 font-medium">Andra Ariloka</span>
+              <div class="bg-gradient-to-r from-[#8B0000] to-[#000043] text-white px-4 py-1.5 rounded-full font-bold text-sm w-20 text-center shadow-md">-3.2%</div>
+            </div>
+            <!-- Item 3 -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 font-medium">Iqbal Raihan</span>
+              <div class="bg-gradient-to-r from-[#8B0000] to-[#000043] text-white px-4 py-1.5 rounded-full font-bold text-sm w-20 text-center shadow-md">+8.3%</div>
+            </div>
+            <!-- Item 4 -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 font-medium">Zhera</span>
+              <div class="bg-gradient-to-r from-[#8B0000] to-[#000043] text-white px-4 py-1.5 rounded-full font-bold text-sm w-20 text-center shadow-md">+0.5%</div>
+            </div>
+            <!-- Item 5 -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400 font-medium">Nashriel</span>
+              <div class="bg-gradient-to-r from-[#8B0000] to-[#000043] text-white px-4 py-1.5 rounded-full font-bold text-sm w-20 text-center shadow-md">-4.2%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KOLOM 3: WIDGETS KANAN -->
+        <div class="flex flex-col gap-6">
+          
+          <!-- Revision Pattern -->
+          <div class="bg-white rounded-[30px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 h-[250px] flex flex-col">
+            <h3 class="text-xl font-bold text-[#8B0000] mb-4 text-center">Revision Pattern</h3>
+            <div class="flex-1 flex items-center justify-center text-gray-300 text-sm italic border-2 border-dashed border-gray-100 rounded-xl m-2">
+              Chart Area
+            </div>
+          </div>
+
+          <!-- Avg Score -->
+          <div class="bg-white rounded-[30px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 flex flex-col items-center justify-center h-[150px]">
+            <h3 class="text-xl font-bold text-[#8B0000] mb-2">Avg. Cont. Score</h3>
+            <span class="text-5xl font-bold text-taskly-dark">9.06</span>
+          </div>
+
+          <!-- Weekly Improvement -->
+          <div class="bg-white rounded-[30px] p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-gray-100 h-[150px] flex flex-col">
+            <h3 class="text-lg font-bold text-[#8B0000] mb-2 text-center">Weekly Improvement Stat</h3>
+            <div class="flex-1 flex items-center justify-center text-gray-300 text-sm italic">
+              No Data
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= SIDEBAR KANAN ================= -->
+  <aside class="w-[90px] bg-[#F8F9FD] flex flex-col items-center py-6 gap-6 border-l border-gray-200/50 relative z-30 shadow-[-4px_0_20px_rgba(0,0,0,0.02)]">
+    
+    <!-- PROFIL USER -->
+    <div class="relative group cursor-pointer mt-2">
+      <div class="w-14 h-14 rounded-full border-[3px] border-white shadow-lg overflow-hidden transition-transform transform group-hover:scale-105">
+        <img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=000043&color=fff" class="w-full h-full object-cover">
+      </div>
+    </div>
+    
+    <div class="w-8 h-[2px] bg-gray-200 rounded-full"></div>
+    
+    <!-- LIST WORKSPACE (Isinya Icon Workspace Aktif) -->
+    <div id="workspaceIconList" class="flex flex-col gap-4 w-full items-center">
+      <!-- Ikon workspace akan muncul disini via JS -->
+    </div>
+
+    <!-- TOMBOL ADD WORKSPACE (+) -->
+    <a href="create.html" class="w-10 h-10 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-taskly-purple hover:border-taskly-purple hover:bg-white transition-all mt-2" title="Create or Join Workspace">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+    </a>
+
+  </aside>
+
+  <script>
+    let currentWorkspaceId = null; 
+
+    // --- HELPER FUNCTIONS (Diperlukan untuk sidebar, dll. - Asumsi disalin dari user-dashboard) ---
+    
+    function getInitials(name) {
+        if (!name) return 'US'; 
+        return name.split(' ').map(n => n.charAt(0)).join('').toUpperCase();
+    }
+
+    function renderProfile(username) {
+        const initials = getInitials(username);
+        const avatarElement = document.getElementById('userAvatar');
+        if (avatarElement) {
+            avatarElement.outerHTML = `<div id="userAvatar" class="w-14 h-14 rounded-full border-[3px] border-white shadow-lg overflow-hidden transition-transform transform group-hover:scale-105 bg-taskly-dark flex items-center justify-center text-white text-xl font-bold">${initials}</div>`;
+        }
+    }
+    
+    function renderWorkspaceIcons(memberships) {
+        const listContainer = document.getElementById('workspaceIconList');
+        if (!listContainer) return;
+        listContainer.innerHTML = ''; 
+        memberships.forEach(member => {
+            const ws = member.workspace;
+            if (!ws) return;
+            const initials = getInitials(ws.name);
+            const isActive = (ws.id === currentWorkspaceId) ? 'border-taskly-purple' : 'border-gray-200';
+            const html = `<div class="w-12 h-12 rounded-[16px] bg-white border-2 ${isActive} shadow-md flex items-center justify-center text-taskly-purple font-bold text-lg cursor-pointer transition-all hover:scale-105" title="${ws.name}">${initials}</div>`;
+            listContainer.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    // --- FUNGSI UTAMA: LOAD PERFORMANCE DATA ---
+
+    async function loadPerformanceData() {
+        const userId = localStorage.getItem('userId');
+        currentWorkspaceId = localStorage.getItem('currentWorkspaceId');
+        
+        // --- AUTHORIZATION CHECK ---
+        const userRole = localStorage.getItem('currentUserRole'); 
+        const allowedRoles = ['Owner', 'PM', 'Admin'];
+        
+        if (!allowedRoles.includes(userRole)) {
+             alert("Akses Ditolak: Hanya PM/Admin yang dapat melihat performa tim.");
+             window.location.replace('user-dashboard.html');
+             return;
+        }
+        // --- END AUTHORIZATION CHECK ---
+
+
+        // Target HTML Containers
+        const contributionList = document.getElementById('contributionListContainer'); 
+        const completionList = document.getElementById('completionListContainer');
+        
+        if (!currentWorkspaceId || !contributionList) return; 
+        
+        contributionList.innerHTML = 'Memuat Data...';
+
+
+        try {
+            const res = await fetch(`http://localhost:3000/api/performance/${currentWorkspaceId}`);
+            const data = await res.json();
+            const { metrics, userMetrics } = data.data;
+
+            if (res.ok) {
+                // 1. Render KPI Summary (Header Cards - ASUMSI ID: totalScoreDisplay, totalUsersDisplay)
+                // document.getElementById('totalScoreDisplay').innerText = metrics.totalScore.toFixed(2);
+                // document.getElementById('totalUsersDisplay').innerText = metrics.totalUsers; 
+                
+                // 2. Render List User (KOLOM 1: Contribution Score List)
+                contributionList.innerHTML = '';
+
+                userMetrics.forEach(user => {
+                    // Tentukan warna berdasarkan skor (Contoh: Skor > 5 dianggap tinggi)
+                    const isHigh = user.totalScore > 5; 
+                    const colorClass = isHigh ? 'bg-green-600' : 'bg-red-600'; 
+                    
+                    const itemHtml = `
+                        <div class="flex items-center justify-between py-2 border-b border-gray-50 hover:bg-gray-50 transition-colors px-2 rounded">
+                            <span class="text-gray-700 font-medium">${user.username} (${user.role})</span>
+                            <div class="${colorClass} text-white px-4 py-1 rounded-full font-bold text-sm w-20 text-center shadow-md">
+                                ${user.totalScore.toFixed(2)}
+                            </div>
+                        </div>
+                    `;
+                    contributionList.insertAdjacentHTML('beforeend', itemHtml);
+                    
+                    // [TODO: Logika untuk mengisi completionList jika diperlukan]
+                });
+            } else {
+                throw new Error(data.message || "Gagal memuat data performa.");
+            }
+
+        } catch (e) {
+            alert(`Error: ${e.message}. Cek backend performance controller.`);
+            contributionList.innerHTML = 'Error koneksi server.';
+        }
+    }
+
+    // --- INIT ---
+    document.addEventListener('DOMContentLoaded', async () => {
+        const userId = localStorage.getItem('userId');
+        const username = localStorage.getItem('username');
+
+        if (!userId) {
+            window.location.replace('login.html');
+            return;
+        }
+        
+        // Fetch data profil dan sidebar
+        const res = await fetch(`http://localhost:3000/api/auth/${userId}`);
+        const data = await res.json();
+        
+        if (res.ok && data.data.workspace) {
+            currentWorkspaceId = data.data.workspace.id;
+            
+            // Simpan role di Local Storage untuk Authorization Check
+            const role = data.data.allMemberships.find(m => m.workspaceId === currentWorkspaceId)?.role || 'Member';
+            localStorage.setItem('currentUserRole', role); // Simpan role
+            
+            // Set Sidebar
+            renderProfile(username || data.data.username);
+            renderWorkspaceIcons(data.data.allMemberships);
+
+            // Muat data performa
+            loadPerformanceData();
+        } else {
+             // Jika sesi valid tapi tidak ada workspace, kirim ke new.html
+             window.location.replace('new.html');
+        }
+    });
+</script>
+
+</body>
+</html>

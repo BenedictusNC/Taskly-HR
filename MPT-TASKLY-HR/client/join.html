@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Taskly HR - Join Workspace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Wix Madefor Text"', 'sans-serif'] },
+          backgroundImage: { 'mask-pattern': "url('mask-group.png')" }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-white min-h-[100dvh] w-full flex flex-col justify-between relative overflow-x-hidden font-sans">
+
+  <div class="fixed top-0 bottom-0 left-0 w-[60px] md:w-[200px] bg-mask-pattern bg-cover bg-center -z-10 opacity-60 scale-x-[-1]"></div>
+  <div class="fixed top-0 bottom-0 right-0 w-[60px] md:w-[200px] bg-mask-pattern bg-cover bg-center -z-10 opacity-60"></div>
+
+  <main class="flex-1 flex justify-center items-center w-full px-4 py-6">
+    
+    <div class="bg-white/90 backdrop-blur-sm md:backdrop-blur-none md:bg-white w-full max-w-[500px] p-6 md:p-10 rounded-[30px] shadow-[0_8px_30px_rgba(0,0,0,0.12)] md:shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-gray-100/50 md:border-gray-100 text-center relative z-10">
+      
+      <h1 class="text-3xl md:text-[48px] font-bold mb-8 md:mb-10 bg-gradient-to-r from-[#aa0000] via-[#4a007e] to-[#000043] bg-clip-text text-transparent tracking-tight">
+        TASKLY HR
+      </h1>
+
+      <form id="joinForm" class="w-full space-y-5 md:space-y-6">
+        
+        <div class="text-left group">
+          <label for="workspaceName" class="block text-base md:text-lg text-[#656565] mb-2 ml-3 font-medium">Workspace Name (Optional)</label>
+          <input type="text" id="workspaceName" placeholder="Untuk referensi pribadi"
+            class="w-full py-3 md:py-3.5 px-5 text-base md:text-lg rounded-full border-none bg-[#f9f9f9] text-gray-700 shadow-[inset_3px_3px_6px_rgba(0,0,0,0.08),inset_-3px_-3px_6px_rgba(255,255,255,0.9)] focus:outline-none focus:ring-2 focus:ring-[#4a007e]/20 transition-all placeholder-gray-400">
+        </div>
+
+        <div class="text-left group">
+          <label for="workspaceCode" class="block text-base md:text-lg text-[#656565] mb-2 ml-3 font-medium">Workspace Code</label>
+          <input type="text" id="workspaceCode" placeholder="Contoh: TASK-8821" required
+            class="w-full py-3 md:py-3.5 px-5 text-base md:text-lg rounded-full border-none bg-[#f9f9f9] text-gray-700 shadow-[inset_3px_3px_6px_rgba(0,0,0,0.08),inset_-3px_-3px_6px_rgba(255,255,255,0.9)] focus:outline-none focus:ring-2 focus:ring-[#4a007e]/20 transition-all placeholder-gray-400">
+        </div>
+
+        <button type="submit" class="w-full py-3 md:py-3.5 mt-4 rounded-full text-lg md:text-xl font-bold text-white bg-gradient-to-r from-[#aa0000] via-[#4a007e] to-[#000043] shadow-[0_8px_15px_rgba(74,0,126,0.25)] hover:scale-[1.02] active:scale-95 transition-all uppercase tracking-wide">
+          Join Workspace
+        </button>
+      </form>
+
+      <div class="mt-8 text-[#656565]">
+        <a href="create.html" class="text-[#9c9c9c] text-lg md:text-xl border-b border-[#9c9c9c] hover:text-[#4a007e] hover:border-[#4a007e] transition-colors pb-0.5">
+          Create Workspace
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="w-full bg-gradient-to-r from-[#aa0000] via-[#4a007e] to-[#000043] text-white/90 text-[11px] md:text-sm z-50 flex flex-col md:flex-row justify-center md:justify-between items-center px-6 md:px-[100px] py-4 md:h-[60px] gap-2 md:gap-0 shrink-0 tracking-wider font-light">
+    <div class="order-2 md:order-1 flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer group">
+      <span>taskly.hr@gmail.com</span>
+    </div>
+    <div class="order-1 md:order-2 font-semibold uppercase tracking-[0.15em] text-xs md:text-sm hover:text-white transition-colors cursor-pointer mb-1 md:mb-0">www.tasklyhr.com</div>
+    <div class="order-3 md:order-3 flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer group">
+      <span>@taskly.hr</span>
+    </div>
+  </footer>
+
+  <script>
+    const form = document.getElementById('joinForm');
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const code = document.getElementById('workspaceCode').value;
+
+      // 1. AMBIL ID USER DARI LOGIN (LocalStorage)
+      const currentUserId = localStorage.getItem('userId');
+
+      if (!currentUserId) {
+        alert("Sesi habis. Silakan login ulang.");
+        window.location.href = 'login.html';
+        return;
+      }
+
+      try {
+        // Kirim request ke Backend
+        const res = await fetch('http://localhost:3000/api/workspace/join', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+              userId: currentUserId, 
+              workspaceCode: code
+          })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert(`🎉 Sukses! Kamu berhasil bergabung ke Workspace: ${data.workspace.name}`);
+          window.location.href = 'user-dashboard.html';
+        } else {
+          alert('Gagal: ' + data.message);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Tidak bisa terhubung ke server. Pastikan backend nyala!');
+      }
+    });
+  </script>
+
+</body>
+</html>
